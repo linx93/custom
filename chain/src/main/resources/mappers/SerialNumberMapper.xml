@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianji.chain.mapper.SerialNumberMapper">
+  <resultMap id="baseResultMap" type="com.tianji.chain.model.SerialNumber">
+    <id property="id" column="id" jdbcType="INTEGER"/>
+    <result property="serialNumber" column="serial_number" jdbcType="VARCHAR"/><!-- 流水编号 -->
+    <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/><!-- 创建时间 -->
+    <result property="type" column="type" jdbcType="INTEGER"/><!-- 流水号类型[1:申请绑定数字身份 2:申请获取数据的授权 3:执行获取数据] -->
+  </resultMap>
+</mapper>

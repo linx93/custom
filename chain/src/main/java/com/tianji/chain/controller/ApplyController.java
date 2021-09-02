@@ -1,0 +1,58 @@
+package com.tianji.chain.controller;
+
+import com.tianji.chain.model.ResRecord;
+import com.tianji.chain.model.dto.ApplyBindDTO;
+import com.tianji.chain.model.dto.ApplyDataAuthDTO;
+import com.tianji.chain.model.dto.ApplyDataDTO;
+import com.tianji.chain.service.ApplyService;
+import com.tianji.chain.utils.Result;
+import org.springframework.web.bind.annotation.*;
+
+
+/**
+ * req_record - 请求记录
+ *
+ * @author linx
+ */
+@RestController
+@RequestMapping("/api/v1/chain/apply")
+public class ApplyController {
+
+
+    private final ApplyService applyService;
+
+    public ApplyController(ApplyService applyService) {
+        this.applyService = applyService;
+    }
+
+    /**
+     * 申请绑定数字身份
+     *
+     * @param applyBindDTO
+     * @return
+     */
+    @PostMapping(value = "/applyBind")
+    public Result<String> applyBind(@RequestBody ApplyBindDTO applyBindDTO) {
+        ResRecord resRecord = applyService.applyBind(applyBindDTO);
+        return Result.success("申请绑定数字身份成功,等待中.....", resRecord.getSerialNumber());
+    }
+
+
+    @PostMapping(value = "/applyDataAuth")
+    public Result<String> applyDataAuth(@RequestBody ApplyDataAuthDTO applyDataAuthDTO) {
+        /**
+         *     APPLY_DATA_AUTH(1,"申请数据授权"),
+         *     OBTAIN_DATA(2,"获取数据"),
+         *     APPLY_BIND_DTID(3,"申请绑定数字身份");
+         */
+        ResRecord resRecord = applyService.applyDataAuth(applyDataAuthDTO);
+        return Result.success("申请获取数据的授权成功,等待中.....", resRecord.getSerialNumber());
+    }
+
+    @PostMapping(value = "/applyData")
+    public Result<String> applyData(@RequestBody ApplyDataDTO applyDataDTO) {
+        ResRecord resRecord = applyService.applyData(applyDataDTO);
+        return Result.success("申请获取数据成功,等待中.....", resRecord.getSerialNumber());
+    }
+
+}

@@ -1,0 +1,6 @@
+POST http://localhost:18002/api/v1/chain/applyBind
+Content-Type: application/json
+
+{}
+
+###
