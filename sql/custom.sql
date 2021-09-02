@@ -11,7 +11,7 @@
  Target Server Version : 80025
  File Encoding         : 65001
 
- Date: 02/09/2021 14:04:08
+ Date: 02/09/2021 14:42:38
 */
 
 SET NAMES utf8mb4;
@@ -50,12 +50,12 @@ CREATE TABLE `res_record` (
   `expire` datetime DEFAULT NULL COMMENT '过期时间',
   `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '凭证类型',
   `times` int DEFAULT NULL COMMENT '转让次数',
-  `biz_data` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '数据载体',
+  `biz_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '数据载体',
   `serial_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '流水编号',
   `res_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '请求类型[1:申请绑定数字身份 2:申请获取数据的授权 3:执行获取数据]',
   `res_time` datetime DEFAULT NULL COMMENT '请求时间',
   `result` varchar(25) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '结果 success/fail\n\n',
-  `claim` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '完整凭证',
+  `claim` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '完整凭证',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='响应记录';
 
