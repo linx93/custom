@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CheckReqServiceImpl implements CheckReqService {
 
-    @Value("${saas.dtc.check:}")
+    @Value("${saas.chain.check:}")
     private String checkUrl;
 
     @Override

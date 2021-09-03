@@ -34,7 +34,7 @@ import java.util.UUID;
 @Service
 public class ReqRecordServiceImpl extends AbstractService<ReqRecord, Long, ReqRecordMapper> implements ReqRecordService {
 
-    @Value("${saas.dtc.create:}")
+    @Value("${saas.chain.createClaim:}")
     private String createClaim;
 
     @Override
@@ -47,13 +47,12 @@ public class ReqRecordServiceImpl extends AbstractService<ReqRecord, Long, ReqRe
     private String buildParams(ApplyDTO applyDTO, SerialNumber serialNumber) {
         ClaimReqBizPackage.ClaimReqBizPackageBuilder builder = ClaimReqBizPackage.builder();
         Integer applyTypeCode = applyDTO.getApplyTypeCode();
-        //TODO 问柯博，问清楚对应的targetId
         if (ApplyType.APPLY_DATA_AUTH.getCode().equals(applyTypeCode)) {
-            builder.targetId("saas_dtc_02");
+            builder.targetId("grant");
         } else if (ApplyType.OBTAIN_DATA.getCode().equals(applyTypeCode)) {
-            builder.targetId("saas_dtc_01");
+            builder.targetId("accept");
         } else if (ApplyType.APPLY_BIND_DTID.getCode().equals(applyTypeCode)) {
-            builder.targetId("saas_dtc_02");
+            builder.targetId("grant");
         } else {
             throw new BussinessException("applyTypeCode参数有误,只能传[1,2,3]其中一个值");
         }

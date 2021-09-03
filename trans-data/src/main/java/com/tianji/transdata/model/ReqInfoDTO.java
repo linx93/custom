@@ -15,7 +15,7 @@ public class ReqInfoDTO {
     /**
      * [POST或GET]
      */
-    private String requestMethod = "POST";
+    private String method = "POST";
     /**
      * 给的demo示例中完整的url
      */

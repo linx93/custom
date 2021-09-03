@@ -19,8 +19,8 @@ custom:
       enable: ${HTTP_PROXY:false}
       ip: ${HTTP_PROXY_IP:127.0.0.1}
       port: ${HTTP_PROXY_PORT:8001}
-#柯博的创建凭证接口地址
+#柯博的医链创建凭证接口地址
 saas:
-  dtc:
-    create:
+  chain:
+    createClaim:
     check:

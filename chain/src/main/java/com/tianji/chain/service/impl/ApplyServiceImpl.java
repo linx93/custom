@@ -174,14 +174,14 @@ public class ApplyServiceImpl implements ApplyService {
         if (optional.isEmpty()) {
             throw new BussinessException("没有查询到对应的授权凭证");
         }
-        bizData.put("authClaim", optional.get());
+        bizData.put("claims", optional.get());
         ApplyDTO build = ApplyDTO.builder()
                 .appId(applyDataDTO.getAppId())
                 .signature(applyDataDTO.getSignature())
                 .rand(applyDataDTO.getRand())
                 //TODO 我不清楚？ 找柯博、白丹确定 在申请授权拿数据 的时候，企业和医链谁对应是issuer谁对应是是holder
                 .issuer(applyDataDTO.getMedicalChainDtid())
-                .holder(applyDataDTO.getBusinessUserDtid())
+                .holder(applyDataDTO.getTransPlatformDtid())
                 .pieces(1)
                 .expire(System.currentTimeMillis() / 1000 + 1000000)
                 .type(DTCType.OTHER.getType())

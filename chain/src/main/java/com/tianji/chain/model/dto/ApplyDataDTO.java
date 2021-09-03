@@ -26,10 +26,10 @@ public class ApplyDataDTO {
     private String rand;
 
 
-    @NotNull(message = "medicalChainDtid不能为空")
+    @NotNull(message = "医链的dtid不能为空")
     private String medicalChainDtid;
-    @NotNull(message = "businessUserDtid不能为空")
-    private String businessUserDtid;
+    @NotNull(message = "交易平台的dtid不能为空")
+    private String transPlatformDtid;
 
     @NotNull(message = "serialNumber不能为空")
     private String serialNumber;
