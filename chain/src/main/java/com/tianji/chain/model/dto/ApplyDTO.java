@@ -1,6 +1,5 @@
 package com.tianji.chain.model.dto;
 
-import com.tinji.common.enums.ApplyType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -22,5 +22,5 @@ custom:
 #柯博的医链创建凭证接口地址
 saas:
   chain:
-    createClaim:
-    check:
+    createClaim: http://192.168.1.56/interface/createClaim
+    check: http://192.168.1.56/api/v1/taas/check

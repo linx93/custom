@@ -33,10 +33,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.tinji</groupId>
-            <artifactId>common</artifactId>
-            <version>0.0.1</version>
-            <scope>compile</scope>
+            <groupId>com.hxmec</groupId>
+            <artifactId>hx-open-sdk</artifactId>
+            <version>1.0.1</version>
+            <systemPath>${pom.basedir}/src/main/resources/lib/hx-open-sdk-1.0.1-SNAPSHOT.jar</systemPath>
+            <scope>system</scope>
         </dependency>
         <dependency>
             <groupId>io.mybatis</groupId>

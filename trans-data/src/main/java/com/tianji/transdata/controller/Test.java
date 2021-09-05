@@ -2,7 +2,6 @@ package com.tianji.transdata.controller;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
-import com.alibaba.fastjson.JSON;
 import com.hxmec.sdk.DefaultClient;
 import com.hxmec.sdk.HxApiException;
 import com.hxmec.sdk.HxClient;
@@ -11,7 +10,7 @@ import com.hxmec.sdk.model.HxCommonRequest;
 import com.hxmec.sdk.model.HxCommonResponse;
 import com.hxmec.sdk.utils.HxHashMap;
 import com.hxmec.sdk.utils.SignatureUtil;
-import com.tinji.common.model.ReqInfoDTO;
+import com.tianji.transdata.model.ReqInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
@@ -71,7 +70,7 @@ public class Test {
 
         //测试我的接口
         ReqInfoDTO reqInfoDTO = new ReqInfoDTO();
-        reqInfoDTO.setRequestMethod("POST");
+        reqInfoDTO.setMethod("POST");
         reqInfoDTO.setUrl(url);
         Map<String, Object> headerMap = new HashMap<>(8);
         headerMap.put("Authorization", token);

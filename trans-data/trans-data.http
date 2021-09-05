@@ -2,7 +2,7 @@ POST http://localhost:18001//api/v1/transData/reqTranData
 Content-Type: application/json
 
 {
-  "requestMethod": "POST",
+  "method": "POST",
   "url": "http://hxapigw.heisea.cn/settle/api/open/v1/delv/apiTest?Nonce=ww548sehcrrr&ApiKey=z3kmulsokwt6pmwo9l2gbbk8&Sign=38041a6e075cb02d2125fe69a0b3f9945a7741095b9f39695e94e12e0f3f17b6&Timestamp=20210831160823&SignType=SHA256",
   "headerMap": {"Authorization": "Bearer 0f8c5791-d55d-48f0-9cc6-991d4ad0d7a8","OptUserNickName": "linzhix"},
   "body": "{\"current\":1,\"size\":1000}"
