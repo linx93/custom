@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import javax.validation.constraints.NotNull;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
