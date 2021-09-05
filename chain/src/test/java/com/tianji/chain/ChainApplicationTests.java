@@ -1,6 +1,7 @@
 package com.tianji.chain;
 
 import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.hxmec.sdk.DefaultClient;
@@ -14,7 +15,6 @@ import com.hxmec.sdk.utils.SignatureUtil;
 import com.tianji.chain.model.dto.ApplyDataDTO;
 import com.tianji.chain.model.dto.ReqInfoDTO;
 import lombok.extern.slf4j.Slf4j;
-import net.phadata.identity.utils.ByteUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -29,18 +29,46 @@ import java.util.Map;
 @SpringBootTest
 class ChainApplicationTests {
 
+    /**
+     * 名词解释:
+     * [dtid:数字身份]
+     * []
+     * []
+     * []
+     * []
+     */
+    /**
+     * 获取数据[结算账户]
+     */
     @Test
-    void contextLoads() {
+    void getApplyDataResult() {
+        String reqUrl = "http://192.168.1.44:18002/api/v1/chain/res/findDataResult";
+        String serialNumber = "";
+        String appId = "tjed1aff77132de9a6";
+        String secret = "a1eda9e647f321c626a496148b19cac1b86ba7d1d9bf46b9bb8197d35ca665c1";
+        SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
+        String rand = sd.format(new Date());
+        String signature = getSignature(appId, secret, rand);
+        HttpResponse httpResponse = HttpRequest.get(reqUrl)
+                .form("appId", appId)
+                .form("rand", rand)
+                .form("signature", signature)
+                .form("serialNumber", serialNumber)
+                .execute();
+        //boolean ok = httpResponse.isOk();
+        String body = httpResponse.body();
+        //body包含了交易平台的数据[比如结算账户信息]
+        log.info("resultData:{}", body);
     }
 
     /**
-     * 查询结算账户测试 [dtid:数字身份]
+     * 申请查询结算账户测试[这里是拿查询结算账户作为例子，其他的接口也一样，无非就是uri、请求参数这些东西不一样]
      *
      * @throws HxApiException
      */
     @Test
-    void querySettleAccount() throws HxApiException {
-        String reqUrl = "http://192.168.1.44:18002//api/v1/chain/apply/applyData";
+    void applySettleAccount() throws HxApiException {
+        String reqUrl = "http://192.168.1.44:18002/api/v1/chain/apply/applyData";
         //请求体
         Map<String, Object> bodyMap = new HashMap<>(8);
         //bodyMap.put("current",1);
@@ -49,6 +77,8 @@ class ChainApplicationTests {
         String medicalChainDtid = "";
         //交易平台的dtid
         String transPlatformDtid = "";
+        //流水号[这个流水号是数据授权结果记录中的流水号]
+        String serialNumber = "";
         String OptUserNickName = "linzhix";
         Map<String, Object> headerMap = new HashMap<>(8);
         headerMap.put("Authorization", getToken());
@@ -64,17 +94,23 @@ class ChainApplicationTests {
                 appId,
                 rand,
                 signature,
-                "serialNumber",//流水号
+                serialNumber,//流水号
                 medicalChainDtid,
                 transPlatformDtid);
         String json = HttpRequest.post(reqUrl)
                 .body(JSONUtil.toJsonStr(applyDataDTO))
                 .execute().body();
+        //json里面会返回一个流水号[serialNumber],用来查询数据
         log.info("response:{}", json);
     }
 
+
     /**
      * 构建签名
+     * @param appId   应用id
+     * @param secret  密钥
+     * @param rand    随机
+     * @return
      */
     private String getSignature(String appId, String secret, String rand) {
         String raw = "key=%s&secret=%s&rand=%s";
@@ -85,7 +121,7 @@ class ChainApplicationTests {
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(secretKeySpec);
             byte[] bytes = mac.doFinal(plain.getBytes());
-            sign = ByteUtil.byte2HexString(bytes);
+            sign = byte2HexString(bytes);
             return sign;
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,6 +129,24 @@ class ChainApplicationTests {
         return sign;
     }
 
+    /**
+     * 字节数组转16进制字符串
+     *
+     * @param bytes
+     * @return
+     */
+    private String byte2HexString(byte[] bytes) {
+        StringBuilder stringBuffer = new StringBuilder();
+        String temp;
+        for (int i = 0; i < bytes.length; i++) {
+            temp = Integer.toHexString(bytes[i] & 0xFF);
+            if (temp.length() == 1) {
+                stringBuffer.append("0");
+            }
+            stringBuffer.append(temp);
+        }
+        return stringBuffer.toString();
+    }
 
     /**
      * 构建请求参数
@@ -137,10 +191,10 @@ class ChainApplicationTests {
     }
 
     /**
-     * 交易平台接口的uri
+     * 构建请求交易平台完整的url[这个是根据交易平台提供的接口文档中的demo得来的]
      *
-     * @param uri
-     * @param body 请求体
+     * @param uri  交易平台提供的接口文档中的uri
+     * @param body 请求体[按交易平台接口文档传]
      * @return
      */
     private String getUrl(String uri, Map<String, Object> body) {
@@ -170,6 +224,12 @@ class ChainApplicationTests {
         return url;
     }
 
+    /**
+     * 这个就是交易平台提供的接口文档中的获取token
+     *
+     * @return
+     * @throws HxApiException
+     */
     private String getToken() throws HxApiException {
         String SERVER_URL = "http://hxapigw.heisea.cn";
         // 授权账号 [ApiKey]

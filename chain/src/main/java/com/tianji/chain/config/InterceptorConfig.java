@@ -22,10 +22,10 @@ public class InterceptorConfig implements WebMvcConfigurer {
     /**
      * 注册自定义拦截器
      */
-    @Override
+   /* @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new CheckReq(checkReqService))
                 .addPathPatterns("/**").excludePathPatterns("/doc.html", "/webjars/**", "/swagger-resources/**");
-    }
+    }*/
 }
 

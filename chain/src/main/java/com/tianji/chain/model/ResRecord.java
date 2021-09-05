@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
- * res_record - 授权记录
+ * res_record -
  *
  * @author linx
  */

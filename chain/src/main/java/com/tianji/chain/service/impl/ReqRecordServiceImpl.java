@@ -14,14 +14,10 @@ import io.mybatis.service.AbstractService;
 import com.tianji.chain.service.ReqRecordService;
 import com.tianji.chain.mapper.ReqRecordMapper;
 import com.tianji.chain.model.ReqRecord;
-import net.phadata.identity.utils.ByteUtil;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -80,24 +76,6 @@ public class ReqRecordServiceImpl extends AbstractService<ReqRecord, Long, ReqRe
         headers[1] = xRand;
         headers[2] = xSignature;
         return headers;
-    }
-
-    @Deprecated
-    private  String hmacSha256(String secret, String key,String rand) {
-        String raw = "key=%s&secret=%s&rand=%s";
-        String plain = String.format(raw, key, secret, rand);
-        String sign = "";
-        try {
-            SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), "HmacSHA256");
-            Mac mac = Mac.getInstance("HmacSHA256");
-            mac.init(secretKeySpec);
-            byte[] bytes = mac.doFinal(plain.getBytes());
-            sign = ByteUtil.byte2HexString(bytes);
-            return sign;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return sign;
     }
 
     private Map<String, Object> buildBizData(ApplyDTO applyDTO, SerialNumber serialNumber) {
