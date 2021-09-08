@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper,ResRecord> implements ResRecordService {
+public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper, ResRecord> implements ResRecordService {
 
     @Override
     public void acceptData(VerifiableClaim verifiableClaim) {
@@ -45,6 +45,7 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper,ResRecord>
                         .type(verifiableClaim.getType().stream().map(String::valueOf).collect(Collectors.joining(",")))
                         .resType(type)
                         .claim(JSON.toJSONString(verifiableClaim))
+                        .result(verifiableClaim.getCredentialSubject().getBizData().getOrDefault(SystemConstant.GRANT, SystemConstant.DISAGREE).toString())
                         .build();
                 save(buildAuth);
                 log.info("accept Data 行为授权");
@@ -61,6 +62,7 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper,ResRecord>
                         .type(verifiableClaim.getType().stream().map(String::valueOf).collect(Collectors.joining(",")))
                         .resType(type)
                         .claim(JSON.toJSONString(verifiableClaim))
+                        .result(verifiableClaim.getCredentialSubject().getBizData().getOrDefault(SystemConstant.GRANT, SystemConstant.DISAGREE).toString())
                         .build();
                 save(buildData);
                 log.info("accept Data 拉取数据");
@@ -77,6 +79,7 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper,ResRecord>
                         .type(verifiableClaim.getType().stream().map(String::valueOf).collect(Collectors.joining(",")))
                         .resType(type)
                         .claim(JSON.toJSONString(verifiableClaim))
+                        .result(verifiableClaim.getCredentialSubject().getBizData().getOrDefault(SystemConstant.GRANT, SystemConstant.DISAGREE).toString())
                         .build();
                 save(buildBind);
                 log.info("accept data 绑定dtid的记录");

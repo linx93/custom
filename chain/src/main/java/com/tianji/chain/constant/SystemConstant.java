@@ -14,17 +14,18 @@ public interface SystemConstant {
     /**
      * 授权DTC的bizdata中同意或不同意授权获取数据的key
      */
-    String AUTH_PULL_DATA = "authPullData";
+    String GRANT = "grant";
 
     /**
-     * 授权DTC的bizdata中【同意授权】获取数据的key  对应的 value
+     * DTC的bizdata中【同意】获取数据的key  对应的 value
      */
-    String AUTH_PULL_DATA_AGREE = "agree";
+    String AGREE = "agree";
 
     /**
-     * 授权DTC的bizdata中【不同意授权】获取数据的key  对应的 value
+     * DTC的bizdata中【不同意】获取数据的key  对应的 value
      */
-    String AUTH_PULL_DATA_DISAGREE = "disagree";
+    String DISAGREE = "disagree";
+
 
     /**
      * 流水编号
