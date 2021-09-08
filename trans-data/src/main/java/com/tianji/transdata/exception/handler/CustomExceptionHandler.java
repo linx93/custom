@@ -1,7 +1,8 @@
-package com.tianji.chain.exception.handler;
+package com.tianji.transdata.exception.handler;
 
-import com.tianji.chain.exception.BussinessException;
-import com.tianji.chain.utils.Result;
+
+import com.tianji.transdata.exception.BussinessException;
+import com.tianji.transdata.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;

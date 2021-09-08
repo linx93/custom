@@ -1,5 +1,6 @@
 package com.tianji.chain.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tianji.chain.exception.BussinessException;
 import com.tianji.chain.model.ResRecord;
 import com.tianji.chain.model.SerialNumber;
@@ -32,20 +33,20 @@ public class BaseController {
         appBO.setSignature(findResultDTO.getSignature());
         appBO.setRand(findResultDTO.getRand());
         appBO.setAppId(findResultDTO.getAppId());
-        boolean check = checkReqService.check(appBO);
+      /*   boolean check = checkReqService.check(appBO);
         if (!check) {
             throw new BussinessException("验签不过!请检查再尝试");
-        }
-        ResRecord one = resRecordService.findOne(ResRecord.builder().serialNumber(serialNumber).build());
+        }*/
+        QueryWrapper<ResRecord> qw = new QueryWrapper<>();
+        qw.eq("serial_number", serialNumber);
+        ResRecord one = resRecordService.getOne(qw);
         if (one != null) {
             //拿到一次数据流水号+1
-            SerialNumber find = new SerialNumber();
-            find.setSerialNumber(serialNumber);
-            SerialNumber result = serialNumberService.findOne(find);
-            SerialNumber update = new SerialNumber();
-            update.setSerialNumber(serialNumber);
-            update.setNumber(result.getNumber() + 1);
-            serialNumberService.updateSelective(update, SerialNumber::getSerialNumber);
+            QueryWrapper<SerialNumber> sqw = new QueryWrapper<>();
+            sqw.eq("serial_number", serialNumber);
+            SerialNumber result = serialNumberService.getOne(sqw);
+            result.setNumber(result.getNumber() + 1);
+            serialNumberService.saveOrUpdate(result);
         }
         return one;
     }

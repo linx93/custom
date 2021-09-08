@@ -1,7 +1,6 @@
 package com.tianji.chain.service;
 
-import com.tianji.chain.model.bo.ClaimReqBizPackage;
-import io.mybatis.service.BaseService;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import com.tianji.chain.model.ResRecord;
 import net.phadata.identity.dtc.entity.VerifiableClaim;
@@ -11,7 +10,7 @@ import net.phadata.identity.dtc.entity.VerifiableClaim;
  *
  * @author linx
  */
-public interface ResRecordService extends BaseService<ResRecord, Long> {
+public interface ResRecordService extends IService<ResRecord> {
 
     /**
      * 回调保存数据

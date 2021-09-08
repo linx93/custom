@@ -1,7 +1,9 @@
 package com.tianji.chain.service.impl;
 
-import io.mybatis.service.AbstractService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import com.tianji.chain.exception.BussinessException;
 import com.tianji.chain.service.SerialNumberService;
 import com.tianji.chain.mapper.SerialNumberMapper;
 import com.tianji.chain.model.SerialNumber;
@@ -16,7 +18,7 @@ import java.util.UUID;
  * @author linx
  */
 @Service
-public class  SerialNumberServiceImpl extends AbstractService<SerialNumber, Long, SerialNumberMapper> implements SerialNumberService {
+public class SerialNumberServiceImpl extends ServiceImpl<SerialNumberMapper, SerialNumber> implements SerialNumberService {
 
     @Override
     public SerialNumber generateSerialNumber(Integer type) {
@@ -27,7 +29,14 @@ public class  SerialNumberServiceImpl extends AbstractService<SerialNumber, Long
         serialNumber.setType(type);
         serialNumber.setSerialNumber(uuid);
         serialNumber.setCreateTime(new Date());
-        SerialNumber save = save(serialNumber);
-        return save;
+        serialNumber.setNumber(0);
+        boolean save = save(serialNumber);
+        if (!save) {
+            throw new BussinessException("生成流水号实体时保存失败");
+        }
+        QueryWrapper<SerialNumber> qw = new QueryWrapper<>();
+        qw.eq("serial_number", uuid);
+        SerialNumber one = getOne(qw);
+        return one;
     }
 }

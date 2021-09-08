@@ -1,6 +1,7 @@
 package com.tianji.chain.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tianji.chain.enums.ApplyType;
 import com.tianji.chain.exception.BussinessException;
 import com.tianji.chain.model.SerialNumber;
@@ -9,11 +10,11 @@ import com.tianji.chain.model.bo.DTCResponse;
 import com.tianji.chain.model.dto.ApplyDTO;
 import com.tianji.chain.utils.HttpClientUtil;
 import com.tianji.chain.utils.Result;
-import io.mybatis.service.AbstractService;
 
 import com.tianji.chain.service.ReqRecordService;
 import com.tianji.chain.mapper.ReqRecordMapper;
 import com.tianji.chain.model.ReqRecord;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,8 +28,9 @@ import java.util.UUID;
  *
  * @author linx
  */
+@Slf4j
 @Service
-public class ReqRecordServiceImpl extends AbstractService<ReqRecord, Long, ReqRecordMapper> implements ReqRecordService {
+public class ReqRecordServiceImpl extends ServiceImpl<ReqRecordMapper,ReqRecord> implements ReqRecordService {
 
     @Value("${saas.chain.createClaim:}")
     private String createClaim;
@@ -46,7 +48,7 @@ public class ReqRecordServiceImpl extends AbstractService<ReqRecord, Long, ReqRe
         if (ApplyType.APPLY_DATA_AUTH.getCode().equals(applyTypeCode)) {
             builder.targetId("grant");
         } else if (ApplyType.OBTAIN_DATA.getCode().equals(applyTypeCode)) {
-            builder.targetId("accept");
+            builder.targetId("grant");
         } else if (ApplyType.APPLY_BIND_DTID.getCode().equals(applyTypeCode)) {
             builder.targetId("grant");
         } else {
@@ -64,6 +66,7 @@ public class ReqRecordServiceImpl extends AbstractService<ReqRecord, Long, ReqRe
                 .times(applyDTO.getTimes())
                 .tdrType(applyDTO.getTdrType())
                 .build();
+        log.info("claimReqBizPackage:{}",build);
         return JSON.toJSONString(build);
     }
 

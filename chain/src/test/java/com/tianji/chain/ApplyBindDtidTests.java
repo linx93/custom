@@ -13,6 +13,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * @description: 绑定dtid测试
@@ -27,13 +28,13 @@ public class ApplyBindDtidTests {
         String reqUrl = "http://192.168.1.44:18002/api/v1/chain/apply/applyBind";
         String appId = "tjed1aff77132de9a6";
         String secret = "a1eda9e647f321c626a496148b19cac1b86ba7d1d9bf46b9bb8197d35ca665c1";
-        SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
-        String rand = sd.format(new Date());
+        //时间戳+随机四位
+        String rand = System.currentTimeMillis()+String.format("%04d",new Random().nextInt(9999));
         String signature = getSignature(appId, secret, rand);
         //医链的Dtid
-        String medicalChainDtid = "";
+        String medicalChainDtid = "dtid:dtca:3mcqJ7vxJ7XHKS66HhDjQHQT6GEh";
         //药企的Dtid
-        String businessUserDtid = "";
+        String businessUserDtid = "dtid:dtca:bT9zYhu2M1cJAfVGeRrdD16E7ic";
         /**
          * 构建请求体参数
          */
@@ -53,12 +54,12 @@ public class ApplyBindDtidTests {
 
     @Test
     void getBindDtidResult() {
-        String reqUrl = "http://192.168.1.44:18002/api/v1/chain/res/findBindResult";
-        String serialNumber = "";
+        String reqUrl = "http://192.168.0.102:18002/api/v1/chain/res/findBindResult";
+        String serialNumber = "b9dd31c4-18ee-4fa6-97be-3038553ae160";
         String appId = "tjed1aff77132de9a6";
         String secret = "a1eda9e647f321c626a496148b19cac1b86ba7d1d9bf46b9bb8197d35ca665c1";
-        SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
-        String rand = sd.format(new Date());
+        //时间戳+随机四位
+        String rand = System.currentTimeMillis()+String.format("%04d",new Random().nextInt(9999));
         String signature = getSignature(appId, secret, rand);
         HttpResponse httpResponse = HttpRequest.get(reqUrl)
                 .form("appId", appId)

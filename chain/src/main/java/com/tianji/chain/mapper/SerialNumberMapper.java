@@ -1,13 +1,15 @@
 package com.tianji.chain.mapper;
 
-import io.mybatis.mapper.Mapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tianji.chain.model.SerialNumber;
+import org.apache.ibatis.annotations.Mapper;
+
 /**
  * serial_number - 流水编号表
  *
  * @author linx
  */
-@org.apache.ibatis.annotations.Mapper
-public interface SerialNumberMapper extends Mapper<SerialNumber, Long> {
+@Mapper
+public interface SerialNumberMapper extends BaseMapper<SerialNumber> {
 
 }

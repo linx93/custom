@@ -1,10 +1,10 @@
 package com.tianji.chain.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tianji.chain.model.SerialNumber;
 import com.tianji.chain.model.bo.DTCResponse;
 import com.tianji.chain.model.dto.ApplyDTO;
 import com.tianji.chain.utils.Result;
-import io.mybatis.service.BaseService;
 
 import com.tianji.chain.model.ReqRecord;
 
@@ -13,7 +13,7 @@ import com.tianji.chain.model.ReqRecord;
  *
  * @author linx
  */
-public interface ReqRecordService extends BaseService<ReqRecord, Long> {
+public interface ReqRecordService extends IService<ReqRecord> {
 
      Result<DTCResponse> execReq(ApplyDTO applyDTO, SerialNumber serialNumber);
 }

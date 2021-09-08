@@ -1,6 +1,6 @@
 package com.tianji.chain.service;
 
-import io.mybatis.service.BaseService;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import com.tianji.chain.model.SerialNumber;
 
@@ -9,6 +9,6 @@ import com.tianji.chain.model.SerialNumber;
  *
  * @author linx
  */
-public interface SerialNumberService extends BaseService<SerialNumber, Long> {
+public interface SerialNumberService extends IService<SerialNumber> {
    SerialNumber generateSerialNumber(Integer type);
 }

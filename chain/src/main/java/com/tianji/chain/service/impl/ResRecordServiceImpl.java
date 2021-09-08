@@ -1,9 +1,9 @@
 package com.tianji.chain.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tianji.chain.constant.SystemConstant;
 import com.tianji.chain.exception.BussinessException;
-import io.mybatis.service.AbstractService;
 
 import com.tianji.chain.service.ResRecordService;
 import com.tianji.chain.mapper.ResRecordMapper;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class ResRecordServiceImpl extends AbstractService<ResRecord, Long, ResRecordMapper> implements ResRecordService {
+public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper,ResRecord> implements ResRecordService {
 
     @Override
     public void acceptData(VerifiableClaim verifiableClaim) {
@@ -49,6 +49,7 @@ public class ResRecordServiceImpl extends AbstractService<ResRecord, Long, ResRe
                 save(buildAuth);
                 log.info("accept Data 行为授权");
                 log.info("verifiableClaim--->" + verifiableClaim);
+                break;
             case "2":
                 ResRecord buildData = ResRecord.builder()
                         .bizData(JSON.toJSONString(bizData))
@@ -64,6 +65,7 @@ public class ResRecordServiceImpl extends AbstractService<ResRecord, Long, ResRe
                 save(buildData);
                 log.info("accept Data 拉取数据");
                 log.info("verifiableClaim--->" + verifiableClaim);
+                break;
             case "3":
                 ResRecord buildBind = ResRecord.builder()
                         .bizData(JSON.toJSONString(bizData))
@@ -79,6 +81,7 @@ public class ResRecordServiceImpl extends AbstractService<ResRecord, Long, ResRe
                 save(buildBind);
                 log.info("accept data 绑定dtid的记录");
                 log.info("verifiableClaim--->" + verifiableClaim);
+                break;
             default:
                 throw new BussinessException("bizData中的type参数有问题[1:获取申请授权结果][3:获取申请绑定结果][2:获取交易数据结果]");
         }

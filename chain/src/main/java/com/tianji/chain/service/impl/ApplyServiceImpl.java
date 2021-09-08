@@ -1,5 +1,6 @@
 package com.tianji.chain.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tianji.chain.exception.BussinessException;
 import com.tianji.chain.mapper.ResRecordMapper;
 import com.tianji.chain.model.ResRecord;
@@ -109,7 +110,7 @@ public class ApplyServiceImpl implements ApplyService {
                 .holder(applyBindDTO.getBusinessUserDtid())
                 .pieces(1)
                 .expire(System.currentTimeMillis() / 1000 + 1000000)
-                .type(DTCType.OTHER.getType())
+                .type(DTCType.TICKET.getType())
                 .tdrType("10002")
                 .times(0)
                 .applyTypeCode(3)
@@ -141,7 +142,7 @@ public class ApplyServiceImpl implements ApplyService {
                 .holder(applyDataAuthDTO.getBusinessUserDtid())
                 .pieces(1)
                 .expire(System.currentTimeMillis() / 1000 + 1000000)
-                .type(DTCType.OTHER.getType())
+                .type(DTCType.TICKET.getType())
                 .tdrType("10002")
                 .times(0)
                 .applyTypeCode(1)
@@ -168,13 +169,14 @@ public class ApplyServiceImpl implements ApplyService {
         //设置医链发过来的请求信息，在消费到获取数据消息时候，利用这些reqInfo去请求数据交易平台
         bizData.put("reqInfoDTO", reqInfoDTO);
         //获取授权的凭证
-        ResRecord res = new ResRecord();
-        res.setSerialNumber(serialNumber.getSerialNumber());
-        Optional<ResRecord> optional = resRecordMapper.selectOne(res);
-        if (optional.isEmpty()) {
-            throw new BussinessException("没有查询到对应的授权凭证");
+        QueryWrapper<ResRecord> rw = new QueryWrapper<>();
+        rw.eq("serial_number", applyDataDTO.getSerialNumber());
+        ResRecord res = resRecordMapper.selectOne(rw);
+        if (res == null) {
+            throw new BussinessException("没有查询到对应的授权凭证,请确认流水号是否问题");
         }
-        bizData.put("claims", optional.get());
+        //设置授权结果的完整凭证claims到bizdata中，用于判断是否能获取数据的根据
+        bizData.put("claims", res);
         ApplyDTO build = ApplyDTO.builder()
                 .appId(applyDataDTO.getAppId())
                 .signature(applyDataDTO.getSignature())
@@ -184,10 +186,10 @@ public class ApplyServiceImpl implements ApplyService {
                 .holder(applyDataDTO.getTransPlatformDtid())
                 .pieces(1)
                 .expire(System.currentTimeMillis() / 1000 + 1000000)
-                .type(DTCType.OTHER.getType())
+                .type(DTCType.TICKET.getType())
                 .tdrType("10002")
                 .times(0)
-                .applyTypeCode(1)
+                .applyTypeCode(2)
                 .bizData(bizData)
                 .build();
         Result<DTCResponse> dtcResponseResult = reqRecordService.execReq(build, serialNumber);

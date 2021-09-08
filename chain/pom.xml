@@ -40,23 +40,9 @@
             <scope>system</scope>
         </dependency>
         <dependency>
-            <groupId>io.mybatis</groupId>
-            <artifactId>mybatis-mapper</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <!-- TODO 按需选择依赖 -->
-        <!-- 使用 Service 层封装时 -->
-        <dependency>
-            <groupId>io.mybatis</groupId>
-            <artifactId>mybatis-service</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <!-- TODO 按需选择依赖 -->
-        <!-- 使用 ActiveRecord 模式时 -->
-        <dependency>
-            <groupId>io.mybatis</groupId>
-            <artifactId>mybatis-activerecord</artifactId>
-            <version>1.0.0</version>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.0.5</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

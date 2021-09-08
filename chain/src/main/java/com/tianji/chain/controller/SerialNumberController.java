@@ -1,5 +1,6 @@
 package com.tianji.chain.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tianji.chain.model.SerialNumber;
 import com.tianji.chain.service.SerialNumberService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public class SerialNumberController {
 
     @GetMapping(value = "findAll")
     public List<SerialNumber> serialNumbers() {
-        return serialNumberService.findAll();
+        return serialNumberService.list(new QueryWrapper<>());
     }
 
 }

@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @Slf4j
 public class Test {
-    public static void main(String[] args) throws HxApiException {
+    /*public static void main(String[] args) throws HxApiException {
         String SERVER_URL = "http://hxapigw.heisea.cn";
         // 授权账号 [ApiKey]
         String ApiKey = "z3kmulsokwt6pmwo9l2gbbk8";
@@ -61,12 +61,12 @@ public class Test {
         log.info("url:{}", url);
         log.info("body:{}", JSONUtil.toJsonStr(body));
         log.info("token:{}", token);
-        /*String json = HttpRequest.post(url)
+        String json = HttpRequest.post(url)
                 .header("Authorization", token)
                 .header("OptUserNickName", OptUserNickName)
                 .body(JSONUtil.toJsonStr(body))
                 .execute().body();
-        log.info("response:{}", json);*/
+        log.info("response:{}", json);
 
         //测试我的接口
         ReqInfoDTO reqInfoDTO = new ReqInfoDTO();
@@ -82,7 +82,7 @@ public class Test {
                 .execute().body();
         log.info("response:{}", body1);
 
-    }
+    }*/
 
 
     private static String getToken() throws HxApiException {

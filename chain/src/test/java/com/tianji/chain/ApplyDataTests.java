@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @description: 申请/获取[交易平台数据]的测试
@@ -48,11 +49,11 @@ class ApplyDataTests {
     @Test
     void getApplyDataResult() {
         String reqUrl = "http://192.168.1.44:18002/api/v1/chain/res/findDataResult";
-        String serialNumber = "";
+        String serialNumber = "5df65217-81e6-4e6f-be59-5f9c6c4571bc";
         String appId = "tjed1aff77132de9a6";
         String secret = "a1eda9e647f321c626a496148b19cac1b86ba7d1d9bf46b9bb8197d35ca665c1";
-        SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
-        String rand = sd.format(new Date());
+        //时间戳+随机四位
+        String rand = System.currentTimeMillis()+String.format("%04d",new Random().nextInt(9999));
         String signature = getSignature(appId, secret, rand);
         HttpResponse httpResponse = HttpRequest.get(reqUrl)
                 .form("appId", appId)
@@ -79,21 +80,21 @@ class ApplyDataTests {
         //bodyMap.put("current",1);
         //bodyMap.put("size",1000);
         //医疗的dtid
-        String medicalChainDtid = "";
+        String medicalChainDtid = "dtid:dtca:3mcqJ7vxJ7XHKS66HhDjQHQT6GEh";
         //交易平台的dtid
-        String transPlatformDtid = "";
+        String transPlatformDtid = "dtid:dtca:2zkWAy7K1V1vwijPErsUCs717RrF";
         //流水号[这个流水号是数据授权结果记录中的流水号]
-        String serialNumber = "";
+        String serialNumber = "b92a8060-c2ea-431d-852b-1c7f394c0bd9";
         String OptUserNickName = "linzhix";
         Map<String, Object> headerMap = new HashMap<>(8);
-        headerMap.put("Authorization", getToken());
+        headerMap.put("Authorization",getToken());
         headerMap.put("OptUserNickName", OptUserNickName);
         String appId = "tjed1aff77132de9a6";
         String secret = "a1eda9e647f321c626a496148b19cac1b86ba7d1d9bf46b9bb8197d35ca665c1";
-        SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
-        String rand = sd.format(new Date());
+        //时间戳+随机四位
+        String rand = System.currentTimeMillis()+String.format("%04d",new Random().nextInt(9999));
         String signature = getSignature(appId, secret, rand);
-        ApplyDataDTO applyDataDTO = getReqParam("/api/open/v1/delv/settleAccount/query",
+        ApplyDataDTO applyDataDTO = getReqParam("/settle/api/open/v1/delv/apiTest",
                 bodyMap,
                 headerMap,
                 appId,
@@ -105,6 +106,8 @@ class ApplyDataTests {
         String json = HttpRequest.post(reqUrl)
                 .body(JSONUtil.toJsonStr(applyDataDTO))
                 .execute().body();
+        log.info("token:{}",headerMap.get("Authorization"));
+        log.info("applyDataDTO:{}",applyDataDTO.getReqInfoDTO());
         //json里面会返回一个流水号[serialNumber],用来查询数据
         log.info("response:{}", json);
     }
@@ -251,6 +254,6 @@ class ApplyDataTests {
         defaultRequest.setApiUrlPath("/newAuth/oauth/token");//目前固定，后续会隐藏请求的地址
         defaultRequest.setUdfParams(map);
         HxCommonResponse hxResponse = (HxCommonResponse) hxClient.execute(defaultRequest, false);
-        return String.valueOf(JSON.parseObject(hxResponse.getData(), HashMap.class).get("access_token"));
+        return "Bearer "+String.valueOf(JSON.parseObject(hxResponse.getData(), HashMap.class).get("access_token"));
     }
 }

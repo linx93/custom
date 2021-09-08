@@ -5,16 +5,14 @@
     <id property="id" column="id" jdbcType="INTEGER"/>
     <result property="issuer" column="issuer" jdbcType="VARCHAR"/><!-- 签发者 -->
     <result property="holder" column="holder" jdbcType="VARCHAR"/><!-- 持有者 -->
-    <result property="unionId" column="union_id" jdbcType="VARCHAR"/><!-- 唯一id -->
     <result property="expire" column="expire" jdbcType="BIGINT"/><!-- 过期时间 -->
-    <result property="pieces" column="pieces" jdbcType="VARCHAR"/><!-- 凭证数 -->
     <result property="type" column="type" jdbcType="VARCHAR"/><!-- 凭证类型 -->
     <result property="times" column="times" jdbcType="INTEGER"/><!-- 转让次数 -->
-    <result property="targetId" column="target_id" jdbcType="VARCHAR"/><!-- 用于指定发送mq队列的 -->
-    <result property="tdrType" column="tdr_type" jdbcType="VARCHAR"/><!-- 标记tdr的类型 -->
     <result property="bizData" column="biz_data" jdbcType="VARCHAR"/><!-- 数据载体 -->
     <result property="serialNumber" column="serial_number" jdbcType="VARCHAR"/><!-- 流水编号 -->
     <result property="resType" column="res_type" jdbcType="VARCHAR"/><!-- 请求类型[1:申请绑定数字身份 2:申请获取数据的授权 3:执行获取数据] -->
     <result property="resTime" column="res_time" jdbcType="TIMESTAMP"/><!-- 请求时间 -->
+    <result property="result" column="result" jdbcType="VARCHAR"/><!-- 结果 success/fail -->
+    <result property="claim" column="claim" jdbcType="VARCHAR"/><!-- 完整的凭证数据 -->
   </resultMap>
 </mapper>
