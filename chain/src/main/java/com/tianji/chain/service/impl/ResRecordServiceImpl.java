@@ -36,7 +36,7 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper, ResRecord
         switch (type) {
             case "1":
                 ResRecord buildAuth = ResRecord.builder()
-                        .bizData(JSON.toJSONString(bizData))
+                        .bizData(bizData)
                         .expire(verifiableClaim.getExpirationDate())
                         .holder(verifiableClaim.getCredentialSubject().getId())
                         .issuer(verifiableClaim.getIssuer())
@@ -44,7 +44,7 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper, ResRecord
                         .serialNumber(bizData.getOrDefault(SystemConstant.SERIAL_NUMBER, "-1").toString())
                         .type(verifiableClaim.getType().stream().map(String::valueOf).collect(Collectors.joining(",")))
                         .resType(type)
-                        .claim(JSON.toJSONString(verifiableClaim))
+                        .claim(verifiableClaim)
                         .result(verifiableClaim.getCredentialSubject().getBizData().getOrDefault(SystemConstant.GRANT, SystemConstant.DISAGREE).toString())
                         .build();
                 save(buildAuth);
@@ -53,7 +53,7 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper, ResRecord
                 break;
             case "2":
                 ResRecord buildData = ResRecord.builder()
-                        .bizData(JSON.toJSONString(bizData))
+                        .bizData(bizData)
                         .expire(verifiableClaim.getExpirationDate())
                         .holder(verifiableClaim.getCredentialSubject().getId())
                         .issuer(verifiableClaim.getIssuer())
@@ -61,7 +61,7 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper, ResRecord
                         .serialNumber(bizData.getOrDefault(SystemConstant.SERIAL_NUMBER, "-1").toString())
                         .type(verifiableClaim.getType().stream().map(String::valueOf).collect(Collectors.joining(",")))
                         .resType(type)
-                        .claim(JSON.toJSONString(verifiableClaim))
+                        .claim(verifiableClaim)
                         .result(verifiableClaim.getCredentialSubject().getBizData().getOrDefault(SystemConstant.GRANT, SystemConstant.DISAGREE).toString())
                         .build();
                 save(buildData);
@@ -70,7 +70,7 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper, ResRecord
                 break;
             case "3":
                 ResRecord buildBind = ResRecord.builder()
-                        .bizData(JSON.toJSONString(bizData))
+                        .bizData(bizData)
                         .expire(verifiableClaim.getExpirationDate())
                         .holder(verifiableClaim.getCredentialSubject().getId())
                         .issuer(verifiableClaim.getIssuer())
@@ -78,7 +78,7 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper, ResRecord
                         .serialNumber(bizData.getOrDefault(SystemConstant.SERIAL_NUMBER, "-1").toString())
                         .type(verifiableClaim.getType().stream().map(String::valueOf).collect(Collectors.joining(",")))
                         .resType(type)
-                        .claim(JSON.toJSONString(verifiableClaim))
+                        .claim(verifiableClaim)
                         .result(verifiableClaim.getCredentialSubject().getBizData().getOrDefault(SystemConstant.GRANT, SystemConstant.DISAGREE).toString())
                         .build();
                 save(buildBind);

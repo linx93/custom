@@ -8,6 +8,8 @@ import com.tianji.chain.service.ApplyService;
 import com.tianji.chain.utils.Result;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 
 /**
  * req_record - 请求记录
@@ -32,14 +34,14 @@ public class ApplyController {
      * @return
      */
     @PostMapping(value = "/applyBind")
-    public Result<String> applyBind(@RequestBody ApplyBindDTO applyBindDTO) {
+    public Result<String> applyBind(@Valid @RequestBody ApplyBindDTO applyBindDTO) {
         ResRecord resRecord = applyService.applyBind(applyBindDTO);
         return Result.success("申请绑定数字身份成功,等待中.....", resRecord.getSerialNumber());
     }
 
 
     @PostMapping(value = "/applyDataAuth")
-    public Result<String> applyDataAuth(@RequestBody ApplyDataAuthDTO applyDataAuthDTO) {
+    public Result<String> applyDataAuth(@Valid @RequestBody ApplyDataAuthDTO applyDataAuthDTO) {
         /**
          *     APPLY_DATA_AUTH(1,"申请数据授权"),
          *     OBTAIN_DATA(2,"获取数据"),
@@ -50,7 +52,7 @@ public class ApplyController {
     }
 
     @PostMapping(value = "/applyData")
-    public Result<String> applyData(@RequestBody ApplyDataDTO applyDataDTO) {
+    public Result<String> applyData(@Valid @RequestBody ApplyDataDTO applyDataDTO) {
         ResRecord resRecord = applyService.applyData(applyDataDTO);
         return Result.success("申请获取数据成功,等待中.....", resRecord.getSerialNumber());
     }

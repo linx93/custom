@@ -101,6 +101,11 @@ public class ApplyServiceImpl implements ApplyService {
         if (serialNumber == null || serialNumber.getSerialNumber() == null) {
             throw new BussinessException("生成流水号出错");
         }
+        //设置描述信息
+        Map<String, Object> bizData = new HashMap<>(8);
+        if (applyBindDTO.getDesc() != null && "".equals(applyBindDTO.getDesc())) {
+            bizData.put("desc", applyBindDTO.getDesc());
+        }
         ApplyDTO build = ApplyDTO.builder()
                 .appId(applyBindDTO.getAppId())
                 .signature(applyBindDTO.getSignature())
@@ -114,6 +119,7 @@ public class ApplyServiceImpl implements ApplyService {
                 .tdrType("10002")
                 .times(0)
                 .applyTypeCode(3)
+                .bizData(bizData)
                 .build();
         Result<DTCResponse> dtcResponseResult = reqRecordService.execReq(build, serialNumber);
         if (!"200000".equals(dtcResponseResult.getCode())) {
@@ -132,7 +138,11 @@ public class ApplyServiceImpl implements ApplyService {
         if (serialNumber == null || serialNumber.getSerialNumber() == null) {
             throw new BussinessException("生成流水号出错");
         }
-
+        //设置描述信息
+        Map<String, Object> bizData = new HashMap<>(8);
+        if (applyDataAuthDTO.getDesc() != null && !"".equals(applyDataAuthDTO.getDesc())) {
+            bizData.put("desc", applyDataAuthDTO.getDesc());
+        }
         ApplyDTO build = ApplyDTO.builder()
                 .appId(applyDataAuthDTO.getAppId())
                 .signature(applyDataAuthDTO.getSignature())
@@ -146,6 +156,7 @@ public class ApplyServiceImpl implements ApplyService {
                 .tdrType("10002")
                 .times(0)
                 .applyTypeCode(1)
+                .bizData(bizData)
                 .build();
         Result<DTCResponse> dtcResponseResult = reqRecordService.execReq(build, serialNumber);
         if (!"200000".equals(dtcResponseResult.getCode())) {
@@ -177,6 +188,10 @@ public class ApplyServiceImpl implements ApplyService {
         }
         //设置授权结果的完整凭证claims到bizdata中，用于判断是否能获取数据的根据
         bizData.put("claims", res);
+        //设置描述信息
+        if (applyDataDTO.getDesc() != null && "".equals(applyDataDTO.getDesc())) {
+            bizData.put("desc", applyDataDTO.getDesc());
+        }
         ApplyDTO build = ApplyDTO.builder()
                 .appId(applyDataDTO.getAppId())
                 .signature(applyDataDTO.getSignature())

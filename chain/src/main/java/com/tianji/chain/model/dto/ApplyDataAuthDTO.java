@@ -5,7 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * @description: 申请数据授权DTO
@@ -28,4 +30,8 @@ public class ApplyDataAuthDTO {
     private String medicalChainDtid;
     @NotNull(message = "药企的Dtid不能为空")
     private String businessUserDtid;
+
+    @Size(message = "描述信息不能大于50",max = 50)
+    private String desc;
 }
+

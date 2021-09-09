@@ -1,11 +1,18 @@
 package com.tianji.chain.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tianji.chain.config.JsonTypeHandler;
 import lombok.*;
+import net.phadata.identity.dtc.entity.VerifiableClaim;
 
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * res_record 响应记录表
@@ -17,6 +24,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName(autoResultMap = true)
 public class ResRecord {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
@@ -49,7 +57,9 @@ public class ResRecord {
     /**
      * 数据载体
      */
-    private String bizData;
+    @TableField(typeHandler = JsonTypeHandler.class)
+    @JSONField(serialize = false)
+    private Map<String, Object> bizData;
 
     /**
      * 流水编号
@@ -74,7 +84,8 @@ public class ResRecord {
     /**
      * 完整的凭证数据
      */
-    private String claim;
+    @TableField(typeHandler = JsonTypeHandler.class)
+    private VerifiableClaim claim;
 
 
 }

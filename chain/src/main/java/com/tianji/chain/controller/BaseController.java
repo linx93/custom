@@ -45,7 +45,9 @@ public class BaseController {
             QueryWrapper<SerialNumber> sqw = new QueryWrapper<>();
             sqw.eq("serial_number", serialNumber);
             SerialNumber result = serialNumberService.getOne(sqw);
-            result.setNumber(result.getNumber() + 1);
+            if (result != null) {
+                result.setNumber(result.getNumber() + 1);
+            }
             serialNumberService.saveOrUpdate(result);
         }
         return one;

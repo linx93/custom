@@ -1,5 +1,6 @@
 package com.tianji.chain.config;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.BaseTypeHandler;
@@ -36,7 +37,8 @@ public class JsonTypeHandler<T extends Object> extends BaseTypeHandler<T> {
      * 2)在MyClassMapper.xml里直接select/update/insert。
      */
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    //private static final ObjectMapper mapper = new ObjectMapper();
+
 
     private Class<T> clazz;
 
@@ -77,7 +79,8 @@ public class JsonTypeHandler<T extends Object> extends BaseTypeHandler<T> {
 
     private String toJson(T object) {
         try {
-            return mapper.writeValueAsString(object);
+            return JSON.toJSONString(object);
+            //return mapper.writeValueAsString(object);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);
@@ -87,7 +90,8 @@ public class JsonTypeHandler<T extends Object> extends BaseTypeHandler<T> {
     private T toObject(String content, Class<?> clazz) {
         if (content != null && !content.isEmpty()) {
             try {
-                return (T) mapper.readValue(content, clazz);
+                return (T) JSON.parseObject(content, clazz);
+                // return (T) mapper.readValue(content, clazz);
             } catch (Exception e) {
                 log.error(e.getMessage());
                 throw new RuntimeException(e);

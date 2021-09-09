@@ -8,11 +8,11 @@
     <result property="expire" column="expire" jdbcType="BIGINT"/><!-- 过期时间 -->
     <result property="type" column="type" jdbcType="VARCHAR"/><!-- 凭证类型 -->
     <result property="times" column="times" jdbcType="INTEGER"/><!-- 转让次数 -->
-    <result property="bizData" column="biz_data" jdbcType="VARCHAR"/><!-- 数据载体 -->
+    <result property="bizData" column="biz_data" jdbcType="VARCHAR" typeHandler="com.tianji.chain.config.JsonTypeHandler"/><!-- 数据载体 -->
     <result property="serialNumber" column="serial_number" jdbcType="VARCHAR"/><!-- 流水编号 -->
     <result property="resType" column="res_type" jdbcType="VARCHAR"/><!-- 请求类型[1:申请绑定数字身份 2:申请获取数据的授权 3:执行获取数据] -->
     <result property="resTime" column="res_time" jdbcType="TIMESTAMP"/><!-- 请求时间 -->
     <result property="result" column="result" jdbcType="VARCHAR"/><!-- 结果 success/fail -->
-    <result property="claim" column="claim" jdbcType="VARCHAR"/><!-- 完整的凭证数据 -->
+    <result property="claim" column="claim" jdbcType="VARCHAR" typeHandler="com.tianji.chain.config.JsonTypeHandler"/><!-- 完整的凭证数据 -->
   </resultMap>
 </mapper>
