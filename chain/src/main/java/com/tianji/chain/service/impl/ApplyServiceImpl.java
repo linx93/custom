@@ -1,6 +1,7 @@
 package com.tianji.chain.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.tianji.chain.constant.SystemConstant;
 import com.tianji.chain.exception.BussinessException;
 import com.tianji.chain.mapper.ResRecordMapper;
 import com.tianji.chain.model.ResRecord;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @description: 请求申请的业务实现
@@ -51,7 +51,7 @@ public class ApplyServiceImpl implements ApplyService {
         }
         Result<DTCResponse> dtcResponseResult = reqRecordService.execReq(applyDTO, serialNumber);
         if (!"200000".equals(dtcResponseResult.getCode())) {
-            throw new BussinessException("请求失败!");
+            throw new BussinessException("请求tdaas创建凭证失败!");
         }
         //查询回推的响应数据
         // ResRecord resRecord = new ResRecord();
@@ -104,7 +104,7 @@ public class ApplyServiceImpl implements ApplyService {
         //设置描述信息
         Map<String, Object> bizData = new HashMap<>(8);
         if (applyBindDTO.getDesc() != null && "".equals(applyBindDTO.getDesc())) {
-            bizData.put("desc", applyBindDTO.getDesc());
+            bizData.put(SystemConstant.BIZ_DATA_DESC, applyBindDTO.getDesc());
         }
         ApplyDTO build = ApplyDTO.builder()
                 .appId(applyBindDTO.getAppId())
@@ -123,7 +123,7 @@ public class ApplyServiceImpl implements ApplyService {
                 .build();
         Result<DTCResponse> dtcResponseResult = reqRecordService.execReq(build, serialNumber);
         if (!"200000".equals(dtcResponseResult.getCode())) {
-            throw new BussinessException("请求失败!");
+            throw new BussinessException("请求tdaas创建凭证失败!  " + dtcResponseResult.getMessage());
         }
         ResRecord resRecord = new ResRecord();
         resRecord.setSerialNumber(serialNumber.getSerialNumber());
@@ -141,8 +141,10 @@ public class ApplyServiceImpl implements ApplyService {
         //设置描述信息
         Map<String, Object> bizData = new HashMap<>(8);
         if (applyDataAuthDTO.getDesc() != null && !"".equals(applyDataAuthDTO.getDesc())) {
-            bizData.put("desc", applyDataAuthDTO.getDesc());
+            bizData.put(SystemConstant.BIZ_DATA_DESC, applyDataAuthDTO.getDesc());
         }
+        //授权的时候设置去哪个交易平台拿数据
+        bizData.put(SystemConstant.TRANS_PLATFORM_DTID, applyDataAuthDTO.getTransPlatformDtid());
         ApplyDTO build = ApplyDTO.builder()
                 .appId(applyDataAuthDTO.getAppId())
                 .signature(applyDataAuthDTO.getSignature())
@@ -160,7 +162,7 @@ public class ApplyServiceImpl implements ApplyService {
                 .build();
         Result<DTCResponse> dtcResponseResult = reqRecordService.execReq(build, serialNumber);
         if (!"200000".equals(dtcResponseResult.getCode())) {
-            throw new BussinessException("请求失败!");
+            throw new BussinessException("请求tdaas创建凭证失败!" + dtcResponseResult.getMessage());
         }
         ResRecord resRecord = new ResRecord();
         resRecord.setSerialNumber(serialNumber.getSerialNumber());
@@ -187,10 +189,10 @@ public class ApplyServiceImpl implements ApplyService {
             throw new BussinessException("没有查询到对应的授权凭证,请确认流水号是否问题");
         }
         //设置授权结果的完整凭证claims到bizdata中，用于判断是否能获取数据的根据
-        bizData.put("claims", res);
+        bizData.put(SystemConstant.BIZ_DATA_CLAIMS, res.getClaim());
         //设置描述信息
         if (applyDataDTO.getDesc() != null && "".equals(applyDataDTO.getDesc())) {
-            bizData.put("desc", applyDataDTO.getDesc());
+            bizData.put(SystemConstant.BIZ_DATA_DESC, applyDataDTO.getDesc());
         }
         ApplyDTO build = ApplyDTO.builder()
                 .appId(applyDataDTO.getAppId())
@@ -209,7 +211,7 @@ public class ApplyServiceImpl implements ApplyService {
                 .build();
         Result<DTCResponse> dtcResponseResult = reqRecordService.execReq(build, serialNumber);
         if (!"200000".equals(dtcResponseResult.getCode())) {
-            throw new BussinessException("请求失败!");
+            throw new BussinessException("请求tdaas创建凭证失败!" + dtcResponseResult.getMessage());
         }
         ResRecord resRecord = new ResRecord();
         resRecord.setSerialNumber(serialNumber.getSerialNumber());

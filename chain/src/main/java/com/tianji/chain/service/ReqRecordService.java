@@ -9,7 +9,7 @@ import com.tianji.chain.utils.Result;
 import com.tianji.chain.model.ReqRecord;
 
 /**
- * req_record - 授权记录
+ * req_record -
  *
  * @author linx
  */

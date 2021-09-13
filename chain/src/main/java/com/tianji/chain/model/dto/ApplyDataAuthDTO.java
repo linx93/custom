@@ -26,10 +26,13 @@ public class ApplyDataAuthDTO {
     @NotNull(message = "rand不能为空")
     private String rand;
 
-    @NotNull(message = "医链的Dtid不能为空")
+    @NotNull(message = "众药帮的Dtid不能为空")
     private String medicalChainDtid;
-    @NotNull(message = "药企的Dtid不能为空")
+    @NotNull(message = "配送企业的Dtid不能为空")
     private String businessUserDtid;
+
+    @NotNull(message = "交易平台的dtid不能为空")
+    private String transPlatformDtid;
 
     @Size(message = "描述信息不能大于50",max = 50)
     private String desc;

@@ -38,7 +38,13 @@ public class ClaimReqBizPackage {
     private Integer times = 0;
     private String targetId;
     private String tdrType;
+    /**
+     * [1:bindDtid、applyDataAuth][2:applyData]
+     */
+    private Integer number;
+
     public static ClaimReqBizPackage parser(String text) {
-        return JSONObject.parseObject(text, new TypeReference<>(){});
+        return JSONObject.parseObject(text, new TypeReference<>() {
+        });
     }
 }

@@ -34,9 +34,30 @@ public interface SystemConstant {
 
 
     /**
-     * bizData中一个类型标志，标志 [1:"行为授权"] [1:"拉取数据"]
+     * bizData中一个类型标志，标志 [1:"申请数据授权"] [2:"获取数据"] [3:申请绑定数字身份]
      */
-    String TYPE = "type";
+    String BIZ_DATA_TYPE = "cType";
+
+
+    /**
+     * bizData中的desc描述信息
+     */
+    String BIZ_DATA_DESC = "desc";
+
+    /**
+     * bizData中的title信息
+     */
+    String BIZ_DATA_TITLE = "title";
+
+    /**
+     * bizData中携带的完整凭证
+     */
+    String BIZ_DATA_CLAIMS = "claims";
+
+    /**
+     * bizData中的交易平台数字身份
+     */
+    String TRANS_PLATFORM_DTID = "transPlatformDtid";
 
     /**
      * 医疗系统推数据回调地址的key

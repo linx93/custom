@@ -2,6 +2,7 @@ package com.tianji.chain.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.tianji.chain.constant.SystemConstant;
 import com.tianji.chain.enums.ApplyType;
 import com.tianji.chain.exception.BussinessException;
 import com.tianji.chain.model.SerialNumber;
@@ -19,18 +20,19 @@ import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 /**
- * req_record - 授权记录
+ * req_record -
  *
  * @author linx
  */
 @Slf4j
 @Service
-public class ReqRecordServiceImpl extends ServiceImpl<ReqRecordMapper,ReqRecord> implements ReqRecordService {
+public class ReqRecordServiceImpl extends ServiceImpl<ReqRecordMapper, ReqRecord> implements ReqRecordService {
 
     @Value("${saas.chain.createClaim:}")
     private String createClaim;
@@ -38,7 +40,7 @@ public class ReqRecordServiceImpl extends ServiceImpl<ReqRecordMapper,ReqRecord>
     @Override
     public Result<DTCResponse> execReq(ApplyDTO applyDTO, SerialNumber serialNumber) {
         //调用柯博的createClaim接口
-        Result<DTCResponse> dtcResponseResult = HttpClientUtil.postForObject(createClaim, buildParams(applyDTO,serialNumber), DTCResponse.class, getHeads(applyDTO.getSignature(),applyDTO.getAppId(), applyDTO.getRand()));
+        Result<DTCResponse> dtcResponseResult = HttpClientUtil.postForObject(createClaim, buildParams(applyDTO, serialNumber), DTCResponse.class, getHeads(applyDTO.getSignature(), applyDTO.getAppId(), applyDTO.getRand()));
         return dtcResponseResult;
     }
 
@@ -47,10 +49,13 @@ public class ReqRecordServiceImpl extends ServiceImpl<ReqRecordMapper,ReqRecord>
         Integer applyTypeCode = applyDTO.getApplyTypeCode();
         if (ApplyType.APPLY_DATA_AUTH.getCode().equals(applyTypeCode)) {
             builder.targetId("grant");
+            builder.number(1);
         } else if (ApplyType.OBTAIN_DATA.getCode().equals(applyTypeCode)) {
             builder.targetId("grant");
+            builder.number(2);
         } else if (ApplyType.APPLY_BIND_DTID.getCode().equals(applyTypeCode)) {
             builder.targetId("grant");
+            builder.number(1);
         } else {
             throw new BussinessException("applyTypeCode参数有误,只能传[1,2,3]其中一个值");
         }
@@ -66,11 +71,11 @@ public class ReqRecordServiceImpl extends ServiceImpl<ReqRecordMapper,ReqRecord>
                 .times(applyDTO.getTimes())
                 .tdrType(applyDTO.getTdrType())
                 .build();
-        log.info("claimReqBizPackage:{}",build);
+        log.info("claimReqBizPackage:{}", build);
         return JSON.toJSONString(build);
     }
 
-    private Header[] getHeads(String signature,String appId, String rand) {
+    private Header[] getHeads(String signature, String appId, String rand) {
         BasicHeader xKey = new BasicHeader("x-key", appId);
         BasicHeader xRand = new BasicHeader("x-rand", rand);
         BasicHeader xSignature = new BasicHeader("x-signature", signature);
@@ -88,28 +93,34 @@ public class ReqRecordServiceImpl extends ServiceImpl<ReqRecordMapper,ReqRecord>
             bizData = reqBizData;
         }
         /**
-         * 类型
+         * c类型
+         */
+        if (bizData.get(SystemConstant.BIZ_DATA_TYPE) == null) {
+            bizData.put(SystemConstant.BIZ_DATA_TYPE, applyDTO.getApplyTypeCode());
+        }
+        /**
+         * c类型
          */
         if (bizData.get("type") == null) {
-            bizData.put("type", applyDTO.getApplyTypeCode());
+            bizData.put("type", "-1");
         }
         /**
          * 描述
          */
-        if (bizData.get("desc") == null) {
-            bizData.put("desc", getDescOrTitle(applyDTO.getApplyTypeCode(), false));
+        if (bizData.get(SystemConstant.BIZ_DATA_DESC) == null) {
+            bizData.put(SystemConstant.BIZ_DATA_DESC, getDescOrTitle(applyDTO.getApplyTypeCode(), false));
         }
         /**
          * 标题
          */
-        if (bizData.get("title") == null) {
-            bizData.put("title", getDescOrTitle(applyDTO.getApplyTypeCode(), true));
+        if (bizData.get(SystemConstant.BIZ_DATA_TITLE) == null) {
+            bizData.put(SystemConstant.BIZ_DATA_TITLE, getDescOrTitle(applyDTO.getApplyTypeCode(), true));
         }
         /**
          * 流水编号
          */
-        if (bizData.get("serialNumber") == null) {
-            bizData.put("serialNumber", serialNumber.getSerialNumber());
+        if (bizData.get(SystemConstant.SERIAL_NUMBER) == null) {
+            bizData.put(SystemConstant.SERIAL_NUMBER, serialNumber.getSerialNumber());
         }
         return bizData;
     }

@@ -31,8 +31,9 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper, ResRecord
         if (bizData == null || bizData.isEmpty()) {
             throw new BussinessException("bizData is empty");
         }
-        String type = bizData.getOrDefault(SystemConstant.TYPE, "-1").toString();
+        String type = bizData.getOrDefault(SystemConstant.BIZ_DATA_TYPE, "-1").toString();
         log.info(" accept Data start");
+        log.info("verifiableClaim:{}", JSON.toJSONString(verifiableClaim, true));
         switch (type) {
             case "1":
                 ResRecord buildAuth = ResRecord.builder()
