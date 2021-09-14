@@ -33,7 +33,6 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper, ResRecord
         }
         String type = bizData.getOrDefault(SystemConstant.BIZ_DATA_TYPE, "-1").toString();
         log.info(" accept Data start");
-        log.info("verifiableClaim:{}", JSON.toJSONString(verifiableClaim, true));
         switch (type) {
             case "1":
                 ResRecord buildAuth = ResRecord.builder()
@@ -50,7 +49,7 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper, ResRecord
                         .build();
                 save(buildAuth);
                 log.info("accept Data 行为授权");
-                log.info("verifiableClaim--->" + verifiableClaim);
+                log.info("verifiableClaim:{}", JSON.toJSONString(verifiableClaim, true));
                 break;
             case "2":
                 ResRecord buildData = ResRecord.builder()
@@ -67,7 +66,7 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper, ResRecord
                         .build();
                 save(buildData);
                 log.info("accept Data 拉取数据");
-                log.info("verifiableClaim--->" + verifiableClaim);
+                log.info("verifiableClaim:{}", JSON.toJSONString(verifiableClaim, true));
                 break;
             case "3":
                 ResRecord buildBind = ResRecord.builder()
@@ -84,7 +83,7 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper, ResRecord
                         .build();
                 save(buildBind);
                 log.info("accept data 绑定dtid的记录");
-                log.info("verifiableClaim--->" + verifiableClaim);
+                log.info("verifiableClaim:{}", JSON.toJSONString(verifiableClaim, true));
                 break;
             default:
                 throw new BussinessException("bizData中的type参数有问题[1:获取申请授权结果][3:获取申请绑定结果][2:获取交易数据结果]");
