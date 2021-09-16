@@ -85,6 +85,7 @@ public class ReqTransDataServiceImpl implements ReqTransDataService {
             }
             //这就是第三方的数据结果
             String resultJson = get.execute().body();
+            log.info("resultJson:{}", resultJson);
             return resultJson;
         } else {
             Map<String, Object> dataMap = new HashMap<>(16);

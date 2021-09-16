@@ -22,6 +22,11 @@ public class AcceptController {
         this.resRecordService = resRecordService;
     }
 
+    /**
+     * 提供给柯博的（医链）服务调用
+     * @param verifiableClaim
+     * @return
+     */
     @PostMapping(value = "/acceptData")
     public Result acceptData(@RequestBody VerifiableClaim verifiableClaim){
         resRecordService.acceptData(verifiableClaim);
