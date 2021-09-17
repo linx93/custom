@@ -26,8 +26,8 @@ public class ApplyAuthDataTests {
     @Test
     void applyDataAuth() {
         String reqUrl = "http://192.168.1.44:18002/api/v1/chain/apply/applyDataAuth";
-        String appId = "tjed1aff77132de9a6";
-        String secret = "a1eda9e647f321c626a496148b19cac1b86ba7d1d9bf46b9bb8197d35ca665c1";
+        String appId = "tj06f5219fd80c110a";
+        String secret = "a38bd61ba2987eb572d4e56cebb65c47cb00e458e286899cca02de9f7a53803d";
         //时间戳+随机四位
         String rand = System.currentTimeMillis()+String.format("%04d",new Random().nextInt(9999));
         String signature = getSignature(appId, secret, rand);
@@ -87,7 +87,7 @@ public class ApplyAuthDataTests {
         String plain = String.format(raw, appId, secret, rand);
         String sign = "";
         try {
-            SecretKeySpec secretKeySpec = new SecretKeySpec(appId.getBytes(), "HmacSHA256");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(), "HmacSHA256");
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(secretKeySpec);
             byte[] bytes = mac.doFinal(plain.getBytes());
@@ -107,14 +107,27 @@ public class ApplyAuthDataTests {
      */
     private String byte2HexString(byte[] bytes) {
         StringBuilder stringBuffer = new StringBuilder();
-        String temp;
-        for (int i = 0; i < bytes.length; i++) {
-            temp = Integer.toHexString(bytes[i] & 0xFF);
+        for(int i = 0; i < bytes.length; ++i) {
+            String temp = Integer.toHexString(bytes[i] & 255);
             if (temp.length() == 1) {
                 stringBuffer.append("0");
             }
             stringBuffer.append(temp);
         }
+
         return stringBuffer.toString();
+    }
+
+
+
+    @Test
+    void getSignature(){
+        String appId = "tj06f5219fd80c110a";
+        String secret = "a38bd61ba2987eb572d4e56cebb65c47cb00e458e286899cca02de9f7a53803d";
+        //时间戳+随机四位
+        String rand = System.currentTimeMillis()/1000+String.format("%04d",new Random().nextInt(9999));
+        String signature = getSignature(appId, secret, rand);
+        log.info("rand:{}",rand);
+        log.info("signature:{}",signature);
     }
 }
