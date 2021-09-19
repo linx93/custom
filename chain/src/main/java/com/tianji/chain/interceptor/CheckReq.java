@@ -8,10 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @description: 检查请求的合法性
+ * @description: 检查请求的合法性 ，已废弃不需要了
  * @author: xionglin
  * @create: 2021-09-01 18:50
  */
+@Deprecated
 public class CheckReq implements HandlerInterceptor {
     private final CheckReqService checkReqService;
 

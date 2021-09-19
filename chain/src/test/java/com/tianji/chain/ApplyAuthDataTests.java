@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Random;
 
@@ -121,9 +123,9 @@ public class ApplyAuthDataTests {
 
 
     @Test
-    void getSignature(){
-        String appId = "tj06f5219fd80c110a";
-        String secret = "a38bd61ba2987eb572d4e56cebb65c47cb00e458e286899cca02de9f7a53803d";
+    void getSignature() throws InterruptedException {
+        String appId = "tja48484ad912021c4";
+        String secret = "4831fe527937fc7128ea072fd32b1cb46fa41f61b11eadf8cf58b7136f34856c";
         //时间戳+随机四位
         String rand = System.currentTimeMillis()/1000+String.format("%04d",new Random().nextInt(9999));
         String signature = getSignature(appId, secret, rand);

@@ -86,7 +86,7 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper, ResRecord
                 log.info("verifiableClaim:{}", JSON.toJSONString(verifiableClaim, true));
                 break;
             default:
-                throw new BussinessException("bizData中的type参数有问题[1:获取申请授权结果][3:获取申请绑定结果][2:获取交易数据结果]");
+                throw new BussinessException("bizData中的cType参数有问题[1:获取申请授权结果][3:获取申请绑定结果][2:获取交易数据结果]");
         }
     }
 }

@@ -54,4 +54,21 @@ public class BaseController {
     }
 
 
+    protected ResRecord findResult(String serialNumber) {
+        QueryWrapper<ResRecord> qw = new QueryWrapper<>();
+        qw.eq("serial_number", serialNumber);
+        ResRecord one = resRecordService.getOne(qw);
+        if (one != null) {
+            //拿到一次数据流水号+1
+            QueryWrapper<SerialNumber> sqw = new QueryWrapper<>();
+            sqw.eq("serial_number", serialNumber);
+            SerialNumber result = serialNumberService.getOne(sqw);
+            if (result != null) {
+                result.setNumber(result.getNumber() + 1);
+            }
+            serialNumberService.saveOrUpdate(result);
+        }
+        return one;
+    }
+
 }

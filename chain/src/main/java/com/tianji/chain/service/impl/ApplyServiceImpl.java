@@ -110,7 +110,6 @@ public class ApplyServiceImpl implements ApplyService {
                 .appId(applyBindDTO.getAppId())
                 .signature(applyBindDTO.getSignature())
                 .rand(applyBindDTO.getRand())
-                //TODO 我不清楚？ 找柯博、白丹确定 在bing dtid的时候，企业和医链谁对应是issuer谁对应是是holder
                 .issuer(applyBindDTO.getMedicalChainDtid())
                 .holder(applyBindDTO.getBusinessUserDtid())
                 .pieces(1)
@@ -149,7 +148,6 @@ public class ApplyServiceImpl implements ApplyService {
                 .appId(applyDataAuthDTO.getAppId())
                 .signature(applyDataAuthDTO.getSignature())
                 .rand(applyDataAuthDTO.getRand())
-                //TODO 我不清楚？ 找柯博、白丹确定 在申请授权拿数据 的时候，企业和医链谁对应是issuer谁对应是是holder
                 .issuer(applyDataAuthDTO.getMedicalChainDtid())
                 .holder(applyDataAuthDTO.getBusinessUserDtid())
                 .pieces(1)
@@ -198,7 +196,6 @@ public class ApplyServiceImpl implements ApplyService {
                 .appId(applyDataDTO.getAppId())
                 .signature(applyDataDTO.getSignature())
                 .rand(applyDataDTO.getRand())
-                //TODO 我不清楚？ 找柯博、白丹确定 在申请授权拿数据 的时候，企业和医链谁对应是issuer谁对应是是holder
                 .issuer(applyDataDTO.getMedicalChainDtid())
                 .holder(applyDataDTO.getTransPlatformDtid())
                 .pieces(1)

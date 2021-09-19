@@ -1,14 +1,18 @@
 package com.tianji.chain.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.tianji.chain.model.ResRecord;
 import com.tianji.chain.model.dto.ApplyBindDTO;
 import com.tianji.chain.model.dto.ApplyDataAuthDTO;
 import com.tianji.chain.model.dto.ApplyDataDTO;
 import com.tianji.chain.service.ApplyService;
 import com.tianji.chain.utils.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 
 /**
@@ -16,9 +20,10 @@ import javax.validation.Valid;
  *
  * @author linx
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/chain/apply")
-public class ApplyController {
+public class ApplyController extends BaseController {
 
 
     private final ApplyService applyService;
@@ -55,6 +60,34 @@ public class ApplyController {
     public Result<String> applyData(@Valid @RequestBody ApplyDataDTO applyDataDTO) {
         ResRecord resRecord = applyService.applyData(applyDataDTO);
         return Result.success("申请获取数据成功,等待中.....", resRecord.getSerialNumber());
+    }
+
+
+    /**
+     * 同步获取数据
+     *
+     * @param applyDataDTO
+     * @return
+     */
+    @PostMapping(value = "/applyDataSync")
+    public Result<ResRecord> applyDataSync(@Valid @RequestBody ApplyDataDTO applyDataDTO) {
+        ResRecord resRecord = applyService.applyData(applyDataDTO);
+        ResRecord result;
+        LocalDateTime start = LocalDateTime.now();
+        while (true) {
+            result = findResult(resRecord.getSerialNumber());
+            if (result != null) {
+                log.info("sync data :{}", JSON.toJSONString(result,true));
+                return Result.success("申请获取数据成功", result);
+            }
+            LocalDateTime end = LocalDateTime.now();
+            long minutes = Duration.between(start, end).toMinutes();
+            if (minutes > applyDataDTO.getMinutes()) {
+                //默认两分钟
+                log.info("applyDataSync :申请获取数据超时,超时时间为:【{}】分钟", applyDataDTO.getMinutes());
+                return Result.fail("申请获取数据超时", null);
+            }
+        }
     }
 
 }

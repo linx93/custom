@@ -39,6 +39,7 @@ public class ReqRecordServiceImpl extends ServiceImpl<ReqRecordMapper, ReqRecord
 
     @Override
     public Result<DTCResponse> execReq(ApplyDTO applyDTO, SerialNumber serialNumber) {
+        //TODO 可以做请求req_record表的持久化，暂时不做，不是必须的
         //调用柯博的createClaim接口
         Result<DTCResponse> dtcResponseResult = HttpClientUtil.postForObject(createClaim, buildParams(applyDTO, serialNumber), DTCResponse.class, getHeads(applyDTO.getSignature(), applyDTO.getAppId(), applyDTO.getRand()));
         return dtcResponseResult;

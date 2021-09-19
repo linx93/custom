@@ -40,4 +40,7 @@ public class ApplyDataDTO {
 
     @Size(message = "描述信息不能大于50",max = 50)
     private String desc;
+
+    @NotNull(message = "等待分钟数，默认两分钟[2]")
+    private Integer minutes = 2;
 }
