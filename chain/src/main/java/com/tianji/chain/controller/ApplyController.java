@@ -71,23 +71,8 @@ public class ApplyController extends BaseController {
      */
     @PostMapping(value = "/applyDataSync")
     public Result<ResRecord> applyDataSync(@Valid @RequestBody ApplyDataDTO applyDataDTO) {
-        ResRecord resRecord = applyService.applyData(applyDataDTO);
-        ResRecord result;
-        LocalDateTime start = LocalDateTime.now();
-        while (true) {
-            result = findResult(resRecord.getSerialNumber());
-            if (result != null) {
-                log.info("sync data :{}", JSON.toJSONString(result,true));
-                return Result.success("申请获取数据成功", result);
-            }
-            LocalDateTime end = LocalDateTime.now();
-            long minutes = Duration.between(start, end).toMinutes();
-            if (minutes > applyDataDTO.getMinutes()) {
-                //默认两分钟
-                log.info("applyDataSync :申请获取数据超时,超时时间为:【{}】分钟", applyDataDTO.getMinutes());
-                return Result.fail("申请获取数据超时", null);
-            }
-        }
+        ResRecord resRecord = applyService.applyDataSync(applyDataDTO);
+        return Result.success("申请获取数据成功", resRecord);
     }
 
 }

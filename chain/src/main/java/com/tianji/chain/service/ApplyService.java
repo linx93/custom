@@ -42,4 +42,13 @@ public interface ApplyService {
      * @return
      */
     ResRecord applyData(ApplyDataDTO applyDataDTO);
+
+
+    /**
+     * 同步的
+     * @param applyDataDTO
+     * @return
+     */
+    ResRecord applyDataSync(ApplyDataDTO applyDataDTO);
+
 }

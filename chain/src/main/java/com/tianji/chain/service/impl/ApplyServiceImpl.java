@@ -1,5 +1,6 @@
 package com.tianji.chain.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tianji.chain.constant.SystemConstant;
 import com.tianji.chain.exception.BussinessException;
@@ -13,9 +14,12 @@ import com.tianji.chain.service.ReqRecordService;
 import com.tianji.chain.service.ResRecordService;
 import com.tianji.chain.service.SerialNumberService;
 import com.tianji.chain.utils.Result;
+import lombok.extern.slf4j.Slf4j;
 import net.phadata.identity.common.DTCType;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +28,7 @@ import java.util.Map;
  * @author: xionglin
  * @create: 2021-08-29 18:07
  */
+@Slf4j
 @Service
 public class ApplyServiceImpl implements ApplyService {
 
@@ -208,11 +213,77 @@ public class ApplyServiceImpl implements ApplyService {
                 .build();
         Result<DTCResponse> dtcResponseResult = reqRecordService.execReq(build, serialNumber);
         if (!"200000".equals(dtcResponseResult.getCode())) {
-            throw new BussinessException("请求tdaas创建凭证失败!" + dtcResponseResult.getMessage());
+            throw new BussinessException("请求tdaas失败!" + dtcResponseResult.getMessage());
         }
         ResRecord resRecord = new ResRecord();
         resRecord.setSerialNumber(serialNumber.getSerialNumber());
         return resRecord;
+    }
+
+    @Override
+    public ResRecord applyDataSync(ApplyDataDTO applyDataDTO) {
+        //生成流水号
+        //[(1,"申请数据授权"),(2,"获取数据"),(3,"申请绑定数字身份")]
+        SerialNumber serialNumber = serialNumberService.generateSerialNumber(2);
+        if (serialNumber == null || serialNumber.getSerialNumber() == null) {
+            throw new BussinessException("生成流水号出错");
+        }
+        ReqInfoDTO reqInfoDTO = applyDataDTO.getReqInfoDTO();
+        Map<String, Object> bizData = new HashMap<>(8);
+        //设置医链发过来的请求信息，在消费到获取数据消息时候，利用这些reqInfo去请求数据交易平台
+        bizData.put("reqInfoDTO", reqInfoDTO);
+        //获取授权的凭证
+        QueryWrapper<ResRecord> rw = new QueryWrapper<>();
+        rw.eq("serial_number", applyDataDTO.getSerialNumber());
+        ResRecord res = resRecordMapper.selectOne(rw);
+        if (res == null) {
+            throw new BussinessException("没有查询到对应的授权凭证,请确认流水号是否问题");
+        }
+        //设置授权结果的完整凭证claims到bizdata中，用于判断是否能获取数据的根据
+        bizData.put(SystemConstant.BIZ_DATA_CLAIMS, res.getClaim());
+        //设置描述信息
+        if (applyDataDTO.getDesc() != null && "".equals(applyDataDTO.getDesc())) {
+            bizData.put(SystemConstant.BIZ_DATA_DESC, applyDataDTO.getDesc());
+        }
+        ApplyDTO build = ApplyDTO.builder()
+                .appId(applyDataDTO.getAppId())
+                .signature(applyDataDTO.getSignature())
+                .rand(applyDataDTO.getRand())
+                .issuer(applyDataDTO.getMedicalChainDtid())
+                .holder(applyDataDTO.getTransPlatformDtid())
+                .pieces(1)
+                .expire(System.currentTimeMillis() / 1000 + 1000000)
+                .type(DTCType.TICKET.getType())
+                .tdrType("10002")
+                .times(0)
+                .applyTypeCode(2)
+                .bizData(bizData)
+                .build();
+        Result<DTCResponse> dtcResponseResult = reqRecordService.execReq(build, serialNumber);
+        if (!"200000".equals(dtcResponseResult.getCode())) {
+            log.info("请求tdaas的创建凭证接口:【{}】", dtcResponseResult.getMessage());
+            throw new BussinessException("请求tdaas失败!" + dtcResponseResult.getMessage());
+        }
+
+        QueryWrapper<ResRecord> qw = new QueryWrapper<>();
+        qw.eq("serial_number", serialNumber.getSerialNumber());
+        //循环等待回推数据
+        ResRecord result;
+        LocalDateTime start = LocalDateTime.now();
+        while (true) {
+            result = resRecordService.getOne(qw);
+            if (result != null) {
+                log.info("sync data :{}", JSON.toJSONString(result, true));
+                return result;
+            }
+            LocalDateTime end = LocalDateTime.now();
+            long minutes = Duration.between(start, end).toMinutes();
+            if (minutes >= applyDataDTO.getMinutes()) {
+                //默认两分钟
+                log.info("applyDataSync :申请获取数据超时,超时时间为:【{}】分钟", applyDataDTO.getMinutes());
+                throw new BussinessException("申请获取数据超时!");
+            }
+        }
     }
 
 

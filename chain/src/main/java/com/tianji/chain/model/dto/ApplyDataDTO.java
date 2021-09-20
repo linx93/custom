@@ -42,5 +42,5 @@ public class ApplyDataDTO {
     private String desc;
 
     @NotNull(message = "等待分钟数，默认两分钟[2]")
-    private Integer minutes = 2;
+    private Integer minutes = 1;
 }
