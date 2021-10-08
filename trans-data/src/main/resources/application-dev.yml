@@ -4,3 +4,20 @@ trans-data:
   createClaim: 192.168.1.56:8080
 server:
   port: 18001
+#日志相关配置
+logging:
+  level:
+    com.tianji.chain: debug
+  file:
+    #总日志文件，生成位置当前目录下的logs里面
+    name: ./logs/trans-data.log
+  logback:
+    rollingpolicy:
+      #服务重启清除历史日志，默认false
+      clean-history-on-start: true
+      #文件名，滚动生成，生成位置当前目录下的logs里面
+      file-name-pattern: ./logs/trans-data.%d{yyyy-MM-dd}.%i.log
+      #默认是7天，保存近30天
+      max-history: 1
+      #滚动日志每个文件大小的上限
+      max-file-size: 6MB

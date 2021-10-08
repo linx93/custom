@@ -1,6 +1,7 @@
 package com.tianji.transdata.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.tianji.transdata.model.ReqInfoDTO;
 import com.tianji.transdata.service.ReqTransDataService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class ReqTransDataController {
      */
     @PostMapping(value = "/reqTranData")
     public Object reqTranData(@RequestBody ReqInfoDTO reqInfoDTO) {
-        log.info("入参reqInfoDTO:{}", reqInfoDTO);
+        log.info("入参reqInfoDTO:{}", JSON.toJSONString(reqInfoDTO, true));
         String jsonStr = transDataService.reqTranData(reqInfoDTO);
         return jsonStr;
     }

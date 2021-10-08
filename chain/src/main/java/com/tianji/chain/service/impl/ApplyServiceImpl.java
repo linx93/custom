@@ -16,6 +16,7 @@ import com.tianji.chain.service.SerialNumberService;
 import com.tianji.chain.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import net.phadata.identity.common.DTCType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -32,7 +33,8 @@ import java.util.Map;
 @Service
 public class ApplyServiceImpl implements ApplyService {
 
-
+    @Value("${saas.chain.seconds:120}")
+    private Long seconds;
     public final ReqRecordService reqRecordService;
     public final ResRecordService resRecordService;
     public final SerialNumberService serialNumberService;
@@ -270,6 +272,10 @@ public class ApplyServiceImpl implements ApplyService {
         //循环等待回推数据
         ResRecord result;
         LocalDateTime start = LocalDateTime.now();
+        //如果客户端没有传入，使用配置项的秒数
+        if (applyDataDTO.getSeconds() == null || applyDataDTO.getSeconds() == 0) {
+            applyDataDTO.setSeconds(seconds);
+        }
         while (true) {
             result = resRecordService.getOne(qw);
             if (result != null) {
@@ -277,11 +283,11 @@ public class ApplyServiceImpl implements ApplyService {
                 return result;
             }
             LocalDateTime end = LocalDateTime.now();
-            long minutes = Duration.between(start, end).toMinutes();
-            if (minutes >= applyDataDTO.getMinutes()) {
-                //默认两分钟
-                log.info("applyDataSync :申请获取数据超时,超时时间为:【{}】分钟", applyDataDTO.getMinutes());
-                throw new BussinessException("申请获取数据超时!");
+            long seconds = Duration.between(start, end).toSeconds();
+            if (seconds >= applyDataDTO.getSeconds()) {
+                //默认60秒
+                log.info("applyDataSync :获取数据超时,超时时间为:【{}】秒", applyDataDTO.getSeconds());
+                throw new BussinessException("获取数据超时!");
             }
         }
     }

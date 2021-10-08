@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
  *
  * @author linx
  */
+@Component
 @Mapper
 public interface ResRecordMapper extends BaseMapper<ResRecord> {
 

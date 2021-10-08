@@ -124,8 +124,8 @@ public class ApplyAuthDataTests {
 
     @Test
     void getSignature() throws InterruptedException {
-        String appId = "tj7356e3f9d9d8ed2e";
-        String secret = "7761f1a69cc49c31f2bdeab26075fa188b74c6ecbb28f1b309ba086591d73318";
+        String appId = "tj8807231b4cb6c568";
+        String secret = "2bc25392de5c5a27c5aaf9e54a25409f9f3b5ea5db0ce9b20703dfa879045750";
         //时间戳+随机四位
         String rand = System.currentTimeMillis()/1000+String.format("%04d",new Random().nextInt(9999));
         String signature = getSignature(appId, secret, rand);

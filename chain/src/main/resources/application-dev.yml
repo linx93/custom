@@ -2,9 +2,9 @@ server:
   port: 18002
 spring:
   datasource:
-    url: jdbc:mysql://192.168.1.100:3306/custom?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://192.168.1.222:13306/custom?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
-    password: 123456
+    password: 123@abcd
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 mybatis-plus:
@@ -20,8 +20,31 @@ custom:
 #柯博的医链创建凭证接口地址
 saas:
   chain:
-    createClaim: http://192.168.1.106:8080/interface/createClaim
-    check: http://192.168.1.106:8080/api/v1/taas/check
+    createClaim: http://192.168.1.222:8089/interface/createClaim
+    #暂时废弃
+    #check: http://127.0.0.1:8080/api/v1/taas/check
+    #获取数据等待时间,默认120秒，超过120就提示超时
+    seconds: 120
+    #应用key
+    appId: tj8807231b4cb6c568
+    #密钥
+    secret: 2bc25392de5c5a27c5aaf9e54a25409f9f3b5ea5db0ce9b20703dfa879045750
+#日志相关配置
 logging:
   level:
-    com.tianji.chain: debug
+    com.tianji.chain.aspect: debug
+    com.tianji.chain: info
+  file:
+    #总日志文件，生成位置当前目录下的logs里面
+    name: ./logs/chain.log
+  logback:
+    rollingpolicy:
+      #服务重启清除历史日志，默认false
+      clean-history-on-start: false
+      #文件名，滚动生成，生成位置当前目录下的logs里面
+      file-name-pattern: ./logs/chain.%d{yyyy-MM-dd}.%i.log
+      #默认是7天，保存近30天
+      max-history: 30
+      #滚动日志每个文件大小的上限
+      max-file-size: 6MB
+
