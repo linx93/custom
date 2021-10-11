@@ -185,7 +185,7 @@ class ChainApplicationTests {
                 .signature(signature)
                 .serialNumber(serialNumber)
                 .medicalChainDtid(medicalChainDtid)
-                .transPlatformDtid(transPlatformDtid)
+                .platformDtid(transPlatformDtid)
                 .build();
         return applyDataDTO;
     }

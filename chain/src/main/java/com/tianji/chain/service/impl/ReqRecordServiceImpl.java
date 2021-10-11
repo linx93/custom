@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -95,7 +96,7 @@ public class ReqRecordServiceImpl extends ServiceImpl<ReqRecordMapper, ReqRecord
         //1. 处理如果signature、appId、rand都为空的时候给默认处理
         if (StrUtil.isAllEmpty(new String[]{signature, appId, rand})) {
             appId = appKey;
-            rand = System.currentTimeMillis() / 1000 + String.format("%04d", new Random().nextInt(9999));
+            rand = Instant.now().getEpochSecond() + String.format("%04d", new Random().nextInt(9999));
             signature = getSignature(appId, secret, rand);
             log.info("rand:{}", rand);
             log.info("signature:{}", signature);

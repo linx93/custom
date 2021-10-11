@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +36,8 @@ public class ApplyServiceImpl implements ApplyService {
 
     @Value("${saas.chain.seconds:120}")
     private Long seconds;
+    @Value("${saas.chain.medical-chain-dtid:}")
+    private String medicalChainDtid;
     public final ReqRecordService reqRecordService;
     public final ResRecordService resRecordService;
     public final SerialNumberService serialNumberService;
@@ -120,7 +123,7 @@ public class ApplyServiceImpl implements ApplyService {
                 .issuer(applyBindDTO.getMedicalChainDtid())
                 .holder(applyBindDTO.getBusinessUserDtid())
                 .pieces(1)
-                .expire(System.currentTimeMillis() / 1000 + 1000000)
+                .expire(Instant.now().getEpochSecond() + 1000000)
                 .type(DTCType.TICKET.getType())
                 .tdrType("10002")
                 .times(0)
@@ -150,15 +153,15 @@ public class ApplyServiceImpl implements ApplyService {
             bizData.put(SystemConstant.BIZ_DATA_DESC, applyDataAuthDTO.getDesc());
         }
         //授权的时候设置去哪个交易平台拿数据
-        bizData.put(SystemConstant.TRANS_PLATFORM_DTID, applyDataAuthDTO.getTransPlatformDtid());
+        bizData.put(SystemConstant.TRANS_PLATFORM_DTID, applyDataAuthDTO.getPlatformDtid());
         ApplyDTO build = ApplyDTO.builder()
                 .appId(applyDataAuthDTO.getAppId())
                 .signature(applyDataAuthDTO.getSignature())
                 .rand(applyDataAuthDTO.getRand())
-                .issuer(applyDataAuthDTO.getMedicalChainDtid())
+                .issuer(applyDataAuthDTO.getMedicalChainDtid() == null||applyDataAuthDTO.getMedicalChainDtid().trim().equals("")?medicalChainDtid:applyDataAuthDTO.getMedicalChainDtid())
                 .holder(applyDataAuthDTO.getBusinessUserDtid())
                 .pieces(1)
-                .expire(System.currentTimeMillis() / 1000 + 1000000)
+                .expire(Instant.now().getEpochSecond() + 1000000)
                 .type(DTCType.TICKET.getType())
                 .tdrType("10002")
                 .times(0)
@@ -203,10 +206,10 @@ public class ApplyServiceImpl implements ApplyService {
                 .appId(applyDataDTO.getAppId())
                 .signature(applyDataDTO.getSignature())
                 .rand(applyDataDTO.getRand())
-                .issuer(applyDataDTO.getMedicalChainDtid())
-                .holder(applyDataDTO.getTransPlatformDtid())
+                .issuer(applyDataDTO.getMedicalChainDtid() == null || "".equals(applyDataDTO.getMedicalChainDtid().trim()) ? medicalChainDtid : applyDataDTO.getMedicalChainDtid())
+                .holder(applyDataDTO.getPlatformDtid())
                 .pieces(1)
-                .expire(System.currentTimeMillis() / 1000 + 1000000)
+                .expire(Instant.now().getEpochSecond() + 1000000)
                 .type(DTCType.TICKET.getType())
                 .tdrType("10002")
                 .times(0)
@@ -251,10 +254,10 @@ public class ApplyServiceImpl implements ApplyService {
                 .appId(applyDataDTO.getAppId())
                 .signature(applyDataDTO.getSignature())
                 .rand(applyDataDTO.getRand())
-                .issuer(applyDataDTO.getMedicalChainDtid())
-                .holder(applyDataDTO.getTransPlatformDtid())
+                .issuer(applyDataDTO.getMedicalChainDtid() == null || "".equals(applyDataDTO.getMedicalChainDtid().trim()) ? medicalChainDtid : applyDataDTO.getMedicalChainDtid())
+                .holder(applyDataDTO.getPlatformDtid())
                 .pieces(1)
-                .expire(System.currentTimeMillis() / 1000 + 1000000)
+                .expire(Instant.now().getEpochSecond() + 1000000)
                 .type(DTCType.TICKET.getType())
                 .tdrType("10002")
                 .times(0)
@@ -263,8 +266,8 @@ public class ApplyServiceImpl implements ApplyService {
                 .build();
         Result<DTCResponse> dtcResponseResult = reqRecordService.execReq(build, serialNumber);
         if (!"200000".equals(dtcResponseResult.getCode())) {
-            log.info("请求tdaas的创建凭证接口:【{}】", dtcResponseResult.getMessage());
-            throw new BussinessException("请求tdaas失败!" + dtcResponseResult.getMessage());
+            log.info("请求tdaas的创建凭证接口异常:【{}】", dtcResponseResult.getMessage());
+            throw new BussinessException(dtcResponseResult.getMessage());
         }
 
         QueryWrapper<ResRecord> qw = new QueryWrapper<>();

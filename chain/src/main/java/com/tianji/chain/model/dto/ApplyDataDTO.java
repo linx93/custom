@@ -20,18 +20,18 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder
 public class ApplyDataDTO {
-    @NotNull(message = "appId不能为空")
+    //@NotNull(message = "appId不能为空")
     private String appId;
-    @NotNull(message = "signature不能为空")
+    //@NotNull(message = "signature不能为空")
     private String signature;
-    @NotNull(message = "rand不能为空")
+    //@NotNull(message = "rand不能为空")
     private String rand;
 
 
-    @NotNull(message = "医链的dtid不能为空")
+    //@NotNull(message = "医链的dtid不能为空")
     private String medicalChainDtid;
     @NotNull(message = "交易平台的dtid不能为空")
-    private String transPlatformDtid;
+    private String platformDtid;
 
     @NotNull(message = "serialNumber不能为空")
     private String serialNumber;

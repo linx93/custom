@@ -29,6 +29,7 @@ saas:
     appId: tj8807231b4cb6c568
     #密钥
     secret: 2bc25392de5c5a27c5aaf9e54a25409f9f3b5ea5db0ce9b20703dfa879045750
+    medicalChainDtid: dtid:dtca:sjE9SpmcLLAktH1uQSkj985PCxH
 #日志相关配置
 logging:
   level:
