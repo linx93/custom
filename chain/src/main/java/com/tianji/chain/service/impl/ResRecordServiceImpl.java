@@ -35,52 +35,19 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper, ResRecord
         log.info(" accept Data start");
         switch (type) {
             case "1":
-                ResRecord buildAuth = ResRecord.builder()
-                        .bizData(bizData)
-                        .expire(verifiableClaim.getExpirationDate())
-                        .holder(verifiableClaim.getCredentialSubject().getId())
-                        .issuer(verifiableClaim.getIssuer())
-                        .resTime(new Date())
-                        .serialNumber(bizData.getOrDefault(SystemConstant.SERIAL_NUMBER, "-1").toString())
-                        .type(verifiableClaim.getType().stream().map(String::valueOf).collect(Collectors.joining(",")))
-                        .resType(type)
-                        .claim(verifiableClaim)
-                        .result(verifiableClaim.getCredentialSubject().getBizData().getOrDefault(SystemConstant.GRANT, SystemConstant.DISAGREE).toString())
-                        .build();
+                ResRecord buildAuth = buildRes(verifiableClaim, bizData, type);
                 save(buildAuth);
                 log.info("accept Data 行为授权");
                 log.info("verifiableClaim:{}", JSON.toJSONString(verifiableClaim, true));
                 break;
             case "2":
-                ResRecord buildData = ResRecord.builder()
-                        .bizData(bizData)
-                        .expire(verifiableClaim.getExpirationDate())
-                        .holder(verifiableClaim.getCredentialSubject().getId())
-                        .issuer(verifiableClaim.getIssuer())
-                        .resTime(new Date())
-                        .serialNumber(bizData.getOrDefault(SystemConstant.SERIAL_NUMBER, "-1").toString())
-                        .type(verifiableClaim.getType().stream().map(String::valueOf).collect(Collectors.joining(",")))
-                        .resType(type)
-                        .claim(verifiableClaim)
-                        .result(verifiableClaim.getCredentialSubject().getBizData().getOrDefault(SystemConstant.GRANT, SystemConstant.DISAGREE).toString())
-                        .build();
+                ResRecord buildData = buildRes(verifiableClaim, bizData, type);
                 save(buildData);
                 log.info("accept Data 拉取数据");
                 log.info("verifiableClaim:{}", JSON.toJSONString(verifiableClaim, true));
                 break;
             case "3":
-                ResRecord buildBind = ResRecord.builder()
-                        .bizData(bizData)
-                        .expire(verifiableClaim.getExpirationDate())
-                        .holder(verifiableClaim.getCredentialSubject().getId())
-                        .issuer(verifiableClaim.getIssuer())
-                        .resTime(new Date())
-                        .serialNumber(bizData.getOrDefault(SystemConstant.SERIAL_NUMBER, "-1").toString())
-                        .type(verifiableClaim.getType().stream().map(String::valueOf).collect(Collectors.joining(",")))
-                        .resType(type)
-                        .claim(verifiableClaim)
-                        .result(verifiableClaim.getCredentialSubject().getBizData().getOrDefault(SystemConstant.GRANT, SystemConstant.DISAGREE).toString())
-                        .build();
+                ResRecord buildBind = buildRes(verifiableClaim, bizData, type);
                 save(buildBind);
                 log.info("accept data 绑定dtid的记录");
                 log.info("verifiableClaim:{}", JSON.toJSONString(verifiableClaim, true));
@@ -88,5 +55,21 @@ public class ResRecordServiceImpl extends ServiceImpl<ResRecordMapper, ResRecord
             default:
                 throw new BussinessException("bizData中的cType参数有问题[1:获取申请授权结果][3:获取申请绑定结果][2:获取交易数据结果]");
         }
+    }
+
+    private ResRecord buildRes(VerifiableClaim verifiableClaim, Map<String, Object> bizData, String type) {
+        ResRecord buildBind = ResRecord.builder()
+                .bizData(bizData)
+                .expire(verifiableClaim.getExpirationDate())
+                .holder(verifiableClaim.getCredentialSubject().getId())
+                .issuer(verifiableClaim.getIssuer())
+                .resTime(new Date())
+                .serialNumber(bizData.getOrDefault(SystemConstant.SERIAL_NUMBER, "-1").toString())
+                .type(verifiableClaim.getType().stream().map(String::valueOf).collect(Collectors.joining(",")))
+                .resType(type)
+                .claim(verifiableClaim)
+                .result(verifiableClaim.getCredentialSubject().getBizData().getOrDefault(SystemConstant.GRANT, SystemConstant.DISAGREE).toString())
+                .build();
+        return buildBind;
     }
 }
